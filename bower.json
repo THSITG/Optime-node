@@ -1,0 +1,23 @@
+{
+  "name": "optime-node",
+  "version": "0.0.0",
+  "authors": [
+    "Liu Xiaoyi <circuitcoder0@gmail.com>"
+  ],
+  "description": "Node.js implementation of the Optime Backend",
+  "keywords": [
+    "Optime"
+  ],
+  "license": "MIT",
+  "homepage": "op-ti.me",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.5.4"
+  }
+}

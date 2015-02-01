@@ -1,5 +1,11 @@
 .DS_Store
 *.jsc
 
+# Node stuff
+bower_components
 node_modules
 npm-debug.log
+
+# We're using VIM!
+*~
+*.sw[a-p]
