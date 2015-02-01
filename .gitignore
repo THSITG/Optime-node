@@ -9,3 +9,7 @@ npm-debug.log
 # We're using VIM!
 *~
 *.sw[a-p]
+
+# Compiled assets
+public/stylesheets
+public/scripts

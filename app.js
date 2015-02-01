@@ -5,6 +5,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var lessMW = require('less-middleware');
+var coffeeMW = require('connect-coffee-script');
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -20,7 +23,15 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(require('less-middleware')(path.join(__dirname, 'public')));
+
+app.use(lessMW(path.join(__dirname, 'assets'),{
+  dest: path.join(__dirname,'public')
+}));
+app.use(coffeeMW({
+  src: path.join(__dirname,'assets'),
+  dest: path.join(__dirname,'public'),
+  compress: true
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
