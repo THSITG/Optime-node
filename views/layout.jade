@@ -2,7 +2,19 @@ doctype html
 html
   head
     title= title
+    script(src='/bower/jquery/dist/jquery.min.js')
     link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='/scripts/script.js',type='text/javascript')
+
+    link(rel='import', href='/bower/polymer/polymer.html')
+
+    block imports
+      link(rel='import', href='/bower/core-elements/core-elements.html')
+      link(rel='import', href='/bower/paper-elements/paper-elements.html')
+      link(rel='import', href='/bower/core-icons/core-icons.html')
+      link(rel='import', href='/bower/core-meta/core-meta.html')
+    
+    block elements
+      
   body
     block content

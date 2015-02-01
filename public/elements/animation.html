@@ -1,0 +1,26 @@
+<polymer-element name="optime-card-fade" extends="core-transition">
+  <script>
+    Polymer({
+      setup: function(node) {
+        node.style.position = 'relative';
+        node.style.opacity = '0';
+        node.style.display = '';
+        node.style.left = '100px';
+        node.transitionMethod=this;
+      },
+      go: function(node) {
+        node.style.transition = 'opacity 0.5s ease-out,left 0.5s ease-out';
+        node.style.opacity = '1';
+        node.style.display = 'block';
+        node.style.left = '0px';
+      },
+      teardown: function(node) {
+        node.style.transition = 'opacity 0.5s ease-in,left 0.5s ease-in';
+        node.style.opacity = '0';
+        node.style.left = '100px';
+      }
+    });
+  </script>
+</polymer-element>
+
+<optime-card-fade id="optime-card-fade"></optime-card-fade>

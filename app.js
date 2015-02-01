@@ -34,6 +34,8 @@ app.use(coffeeMW({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/bower',express.static(path.join(__dirname, 'bower_components')));
+
 app.use('/', routes);
 app.use('/users', users);
 

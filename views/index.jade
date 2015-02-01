@@ -1,5 +1,16 @@
 extends layout
 
+block elements
+  link(rel="import",href="/elements/navbar.html")
+  link(rel="import",href="/elements/card.html")
+  link(rel="import",href="/elements/animation.html")
+
 block content
-  h1= title
-  p Welcome to #{title}
+  body(fullbleed,vertical,layout)
+    optime-navbar(id="navbar")
+    optime-card(wide,id="hint-wip",dismissable)
+      h1 Optime
+      p.
+        It's working in progress.
+      p.
+        For futher information, please log in to <a href="http://op-ti.me">op-ti.me</a> to explore more.

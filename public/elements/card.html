@@ -1,0 +1,67 @@
+<polymer-element name="optime-card">
+  <template>
+    <style>
+      :host {
+        margin: 20px auto;
+        width: auto;
+        display: inline;
+        font-family: Calibri;
+        font-size: 1.2em;
+      }
+
+      paper-shadow {
+        height: auto;
+        display: block;
+        box-sizing: border-box;
+        border: none;
+        background-color: white;
+        color: black;
+        padding: 20px;
+        border-radius: 2px;
+
+        width: 390px;
+      }
+
+      ::content h1 {
+        color: #999;
+        margin-top: 0;
+        font-weight: normal;
+        font-family: Courier;
+      }
+
+      :host([wide])::shadow paper-shadow {
+        width: 800px;
+        padding: 40px;
+      }
+    </style>
+    <paper-shadow z='{{z}}'>
+      <content></content>
+      <div horizontal layout reverse>
+        <template bind="{{acceptAction as acceptAction}}" if="{{acceptable}}">
+          <paper-button on-tap="{{acceptAction}}">{{acceptText}}</paper-button>
+        </template>
+        <template bind="{{dismissAction as dismissAction}}" if="{{dismissable}}">
+          <paper-button on-tap="{{dismissAction}}">{{dismissText}}</paper-button>
+        </template>
+      </div>
+    </paper-shadow>
+  </template>
+  <script>
+    Polymer({
+      z: 1,
+      acceptText: "Accept",
+      dismissText: "Dismiss",
+      acceptable: false,
+      dismissable: false,
+      dismissAction: function(e) {
+        if(this.transitionMethod) this.transitionMethod.teardown(this);
+        else this.style.opacity="0";
+      },
+      acceptAction: function(e) {},
+      ready: function() {
+        this.acceptable=this.hasAttribute("acceptable");
+        this.dismissable=this.hasAttribute("dismissable");
+      }
+    });
+  </script>
+</polymer-element>
