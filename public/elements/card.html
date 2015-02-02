@@ -7,6 +7,8 @@
         display: inline;
         font-family: Calibri;
         font-size: 1.2em;
+
+        transition: height 0.5s ease-in-out,margin-top 0.5s ease-in-out, margin-bottom 0.5s ease-in-out;
       }
 
       paper-shadow {
@@ -20,6 +22,8 @@
         border-radius: 2px;
 
         width: 390px;
+        transform: translate(0,0) scale(0,0);
+        opacity: 0;
       }
 
       ::content h1 {
@@ -33,8 +37,26 @@
         width: 800px;
         padding: 40px;
       }
+
+      :host([optime-status='shown'])::shadow paper-shadow {
+        transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+        transform: translate(0,0) scale(1,1);
+        opacity: 1;
+      }
+      :host([optime-status='dismissed'])::shadow paper-shadow {
+        transition: transform 0.5s ease-in, opacity 0.5s ease-in;
+        transform: translate(100px,0) scale(1,1);
+        opacity: 0;
+      }
+
+      :host([optime-status='hidden']) {
+        height: 0;
+        margin-top: 0px;
+        margin-bottom: 0px;
+      }
+
     </style>
-    <paper-shadow z='{{z}}'>
+    <paper-shadow id="container" z='{{z}}'>
       <content></content>
       <div horizontal layout reverse>
         <template bind="{{acceptAction as acceptAction}}" if="{{acceptable}}">
@@ -61,6 +83,11 @@
       ready: function() {
         this.acceptable=this.hasAttribute("acceptable");
         this.dismissable=this.hasAttribute("dismissable");
+      },
+      getInnerHeight: function() {
+        var cont=$(this.shadowRoot).children("paper-shadow");
+        innerHeight = cont.outerHeight();
+        return innerHeight;
       }
     });
   </script>

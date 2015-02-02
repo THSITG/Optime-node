@@ -2,22 +2,34 @@
   <script>
     Polymer({
       setup: function(node) {
-        node.style.position = 'relative';
-        node.style.opacity = '0';
-        node.style.display = '';
-        node.style.left = '100px';
         node.transitionMethod=this;
+	node.setAttribute("optime-status",'hidden');
       },
+
       go: function(node) {
-        node.style.transition = 'opacity 0.5s ease-out,left 0.5s ease-out';
-        node.style.opacity = '1';
-        node.style.display = 'block';
-        node.style.left = '0px';
+        node.style.height = node.getInnerHeight() + "px";
+	node.setAttribute("optime-status",'placed');
+        window.setTimeout(function() {
+          node.setAttribute("optime-status",'shown');
+          node.style.height = 'auto';
+        },700);
       },
+
       teardown: function(node) {
-        node.style.transition = 'opacity 0.5s ease-in,left 0.5s ease-in';
-        node.style.opacity = '0';
-        node.style.left = '100px';
+        var callback=this.complete;
+        node.style.height = node.getInnerHeight() + "px";
+	node.setAttribute("optime-status",'dismissed');
+	window.setTimeout(function() {
+          node.setAttribute("optime-status","hidden");
+        node.style.height = "0";
+          window.setTimeout(function() {
+            callback(node);
+          },700);
+	},700);
+      },
+
+      complete: function(node) {
+        console.log("Node has been dismissed");
       }
     });
   </script>
