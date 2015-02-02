@@ -10,6 +10,7 @@ var coffeeMW = require('connect-coffee-script');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var bowers = require('./routes/bowers');
 
 var app = express();
 
@@ -34,7 +35,7 @@ app.use(coffeeMW({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/bower',express.static(path.join(__dirname, 'bower_components')));
+app.use('/bower', bowers);
 
 app.use('/', routes);
 app.use('/users', users);
