@@ -86,8 +86,7 @@
       },
       getInnerHeight: function() {
         var cont=$(this.shadowRoot).children("paper-shadow");
-        innerHeight = cont.outerHeight();
-        return innerHeight;
+        return window.getComputedStyle(cont[0]).height;
       }
     });
   </script>

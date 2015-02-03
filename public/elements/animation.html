@@ -7,7 +7,7 @@
       },
 
       go: function(node) {
-        node.style.height = node.getInnerHeight() + "px";
+        node.style.height = node.getInnerHeight();
 	node.setAttribute("optime-status",'placed');
         window.setTimeout(function() {
           node.setAttribute("optime-status",'shown');
@@ -17,7 +17,7 @@
 
       teardown: function(node) {
         var callback=this.complete;
-        node.style.height = node.getInnerHeight() + "px";
+        node.style.height = node.getInnerHeight();
 	node.setAttribute("optime-status",'dismissed');
 	window.setTimeout(function() {
           node.setAttribute("optime-status","hidden");
