@@ -8,15 +8,18 @@ block elements
 block content
   body(fullbleed,vertical,layout)
     optime-navbar(id="navbar")
-    optime-card(wide,id="hint-wip",dismissable)
+    optime-card(wide,id="hint-wip",dismissable,optime-animation="optime-card-fade")
       h1 Optime
       p.
         It's working in progress.
       p.
         For futher information, please log in to <a href="http://op-ti.me">op-ti.me</a> to explore more.
-    optime-card(wide,id="test-card",dismissable,optime-auto-load)
+    optime-card(wide,id="test-card",dismissable,optime-animation="optime-card-fade",optime-auto-load)
       h1 This is a test card
       p.
         As it says...
       p.
         TESTTESTTESTTESTTEST
+    optime-card(wide,id="test-card-2nd",dismissable,acceptable,optime-animation="optime-card-fade",optime-auto-load)
+      h1 Another test
+      p T

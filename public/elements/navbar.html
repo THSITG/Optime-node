@@ -28,11 +28,8 @@
     Polymer({
       pageTitle: "Loading...",
       menuAction: function(e) {
-        var meta = document.createElement('core-meta');
-        meta.type='transition';
-        var transition = meta.byId("optime-card-fade");
-        var animated = $("#hint-wip")[0];
-        transition.go(animated);
+        var hint = $("#hint-wip")[0];
+        hint.show();
       }
     });
   </script>
