@@ -83,6 +83,16 @@
       ready: function() {
         this.acceptable=this.hasAttribute("acceptable");
         this.dismissable=this.hasAttribute("dismissable");
+
+        var meta = document.createElement('core-meta');
+        meta.type='transition';
+        var transition = meta.byId("optime-card-fade");
+        this.transitionMethod=transition;
+
+        this.transitionMethod.setup(this);
+
+        if(this.hasAttribute("optime-auto-load"))
+          this.transitionMethod.go(this);
       },
       getInnerHeight: function() {
         var cont=$(this.shadowRoot).children("paper-shadow");
