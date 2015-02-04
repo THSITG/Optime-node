@@ -14,6 +14,12 @@ window.addEventListener "polymer-ready", (e) ->
     transition.setup(this)
   )
 
+  # Finished Load
+  $("body").addClass("optime-loaded")
+  window.setTimeout(() ->
+    $("#loading-overlap").remove()
+  ,500)
+
   loads = $ "[optime-auto-load]"
   it = 0
   loader = () ->

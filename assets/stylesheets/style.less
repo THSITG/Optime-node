@@ -9,3 +9,50 @@ body {
 a {
   color: #00B7FF;
 }
+
+#loading-overlap {
+  // Cyan 500
+  background-color: #00bcd4;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  z-index: 100000;
+  transition: opacity 0.5s ease-in-out;
+  -o-transition: opacity 0.5s ease-in-out;
+  -moz-transition: opacity 0.5s ease-in-out;
+  -webkit-transition: opacity 0.5s ease-in-out;
+  opacity: 1;
+}
+
+body.optime-loaded #loading-overlap {
+  opacity: 0;
+}
+
+#loading-container {
+  display: block;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  margin-top: -100px;
+  h1 {
+    display: block;
+    text-align: center;
+    color: white;
+    font-size: 48px;
+    font-family: Roboto;
+    font-weight: light;
+    margin: 10px auto;
+  }
+  div {
+    display: block;
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+    font-family: "Courier New";
+    // Cyan 200
+    color: #80deea;
+  }
+}
