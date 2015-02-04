@@ -89,12 +89,18 @@
       dismissable: false,
 
       show: function() {
+        if(this.shown) return false;
+        this.shown=true;
         if(this.transitionMethod) this.transitionMethod.go(this);
         else this.style.opacity="1";
+        return true;
       },
       hide: function() {
+        if(!this.shown) return false;
+        this.shown=false;
         if(this.transitionMethod) this.transitionMethod.teardown(this);
         else this.style.opacity="0";
+        return true;
       },
 
       dismissAction: function(e) {
