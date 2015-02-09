@@ -1,4 +1,15 @@
-window.addEventListener "polymer-ready", (e) ->
+importList = [
+  '/bower/core-elements/core-elements.html',
+  '/bower/paper-elements/paper-elements.html',
+  '/bower/core-icons/core-icons.html',
+  '/bower/core-meta/core-meta.html',
+  '/elements/navbar.html',
+  '/elements/card.html',
+  '/elements/animation.html'
+]
+
+
+setupPage = () ->
   console.log "loaded"
   $("#navbar")[0].pageTitle = "Optime"
 
@@ -16,7 +27,7 @@ window.addEventListener "polymer-ready", (e) ->
 
   # Finished Load
   $("body").addClass("optime-loaded")
-  window.setTimeout(() ->
+  window.setTimeout( ()->
     $("#loading-overlap").remove()
   ,500)
 
@@ -27,3 +38,10 @@ window.addEventListener "polymer-ready", (e) ->
     it += 1
     window.setTimeout loader,100 if it < loads.length
   loader()
+
+
+window.addEventListener "polymer-ready", (e) ->
+  $("body").addClass("optime-loading")
+  Polymer.import(importList,setupPage)
+
+

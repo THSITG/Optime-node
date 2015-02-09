@@ -4,6 +4,12 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color: #E0F7FA; // Cyan 50
   overflow-x: hidden;
+  transition: opacity 0.5s ease-in-out;
+  opacity: 0;
+}
+
+body.optime-loading, body.optime-loaded {
+  opacity: 1;
 }
 
 a {
