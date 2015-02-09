@@ -44,9 +44,9 @@ app.use('/bower', bowers);
 
 app.use('/', index);
 app.use('/users', users);
-app.use('signup', signup);
-app.use('login', login);
-app.use('logout', logout);
+app.use('/signup', signup);
+app.use('/login', login);
+app.use('/logout', logout);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
