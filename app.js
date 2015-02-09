@@ -8,8 +8,13 @@ var bodyParser = require('body-parser');
 var lessMW = require('less-middleware');
 var coffeeMW = require('connect-coffee-script');
 
-var routes = require('./routes/index');
+var mongoose = require('mongoose');
+
+var index = require('./routes/index');
 var users = require('./routes/users');
+var signup = require('./routes/signup');
+var login = require('./routes/login');
+var logout = require('./routes/logout');
 var bowers = require('./routes/bowers');
 
 var app = express();
@@ -37,8 +42,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/bower', bowers);
 
-app.use('/', routes);
+app.use('/', index);
 app.use('/users', users);
+app.use('signup', signup);
+app.use('login', login);
+app.use('logout', logout);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -70,7 +78,5 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
-app.listen(3000);
 
 module.exports = app;
