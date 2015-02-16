@@ -6,6 +6,11 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
+	app.post('/login',
+		passport.authenticate('local', { 
+  			successRedirect: '/users' + req.user.email,
+  			failureRedirect: '/login'
+  		}));
 });
 
 module.exports = router;

@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Taskboards = new Schema({
+var BoardSchema = new Schema({
 		id: String,
 		name: String,
 		tasks: [{
@@ -12,3 +12,7 @@ var Taskboards = new Schema({
 				id: String,
 				admin: Boolean}]
 });
+
+var Board = mongoose.model('Board', BoardSchema);
+
+module.exports = Board;

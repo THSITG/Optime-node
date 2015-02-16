@@ -4,11 +4,41 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var crypto = require('crypto');
+var md5 = crypto.createHash('md5');
 
 var lessMW = require('less-middleware');
 var coffeeMW = require('connect-coffee-script');
 
 var mongoose = require('mongoose');
+mongoose.connect('mongodb://127.0.0.1/test');
+
+var Task = require('./schemas/task');
+var User = require('./schemas/user');
+var Board = require('./schemas/board');
+
+var passport = require('passport')
+  , LocalStrategy = require('passport-local').Strategy;
+
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+}, function(email, password, done) {
+    User.findOne({ email: email }, function (err, user) {
+        if (err) { return done(err); }
+        if (!user) {
+            return done(null, false, { message: 'Incorrect email.' });
+        }
+        token = email + password;
+        md5.update(token);
+        var encrypted = md5.digest('base64');
+        if (encrypted != user.password) {
+            return done(null, false, { message: 'Incorrect password.' });
+        }
+        return done(null, user);
+    });
+    }
+));
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -18,6 +48,13 @@ var logout = require('./routes/logout');
 var bowers = require('./routes/bowers');
 
 var app = express();
+
+users.use(function (req, res, next) {
+    if (req.isAuthenticated())
+        return next();
+
+    res.redirect('/');
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

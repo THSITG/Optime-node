@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var User = new Schema({
-		id: String,
+var UserSchema = new Schema({
 		name: String,
 		email: String,
+		password: String,
 		boards: [{
 				id: String,
 				color: String,
@@ -12,3 +12,7 @@ var User = new Schema({
 				admin: Boolean
 		}]
 });
+
+var User = mongoose.model('User', UserSchema);
+
+module.exports = User;
