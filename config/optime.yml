@@ -1,0 +1,5 @@
+database:
+  name: optime
+  host: localhost
+
+port: 3000

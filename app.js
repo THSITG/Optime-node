@@ -1,5 +1,4 @@
 var express = require('express');
-var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -7,15 +6,40 @@ var bodyParser = require('body-parser');
 var crypto = require('crypto');
 var md5 = crypto.createHash('md5');
 
+var path = require('path');
+var fs = require('fs');
+
 var lessMW = require('less-middleware');
 var coffeeMW = require('connect-coffee-script');
 
+var app = express();
+var config = require('./config.js');
+
+// Setup Database
+
+var mongoConnStr = "mongodb://"
+
+if(config.get("database:username") != null && config.get("database:password") != null) {
+  mongoConnStr += config.get("database:username")
+  + ":"
+  + config.get("database:password")
+  + "@";
+}
+
+mongoConnStr += config.get("database:host");
+if(config.get("database:port")) {
+  mongoConnStr += ":" + config.get("database:port");
+}
+mongoConnStr += "/" + config.get("database:name");
+
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1/test');
+mongoose.connect(mongoConnStr);
 
 var Task = require('./schemas/task');
 var User = require('./schemas/user');
 var Board = require('./schemas/board');
+
+// Login Logic
 
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
@@ -46,8 +70,6 @@ var signup = require('./routes/signup');
 var login = require('./routes/login');
 var logout = require('./routes/logout');
 var bowers = require('./routes/bowers');
-
-var app = express();
 
 users.use(function (req, res, next) {
     if (req.isAuthenticated())
