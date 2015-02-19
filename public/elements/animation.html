@@ -12,7 +12,7 @@
         window.setTimeout(function() {
           node.setAttribute("optime-status",'shown');
           node.style.height = 'auto';
-        },700);
+        },500);
       },
 
       teardown: function(node) {
@@ -24,8 +24,8 @@
         node.style.height = "0";
           window.setTimeout(function() {
             callback(node);
-          },700);
-	},700);
+          },500);
+	},500);
       },
 
       complete: function(node) {
