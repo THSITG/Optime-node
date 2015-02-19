@@ -1,0 +1,84 @@
+<polymer-element name="optime-frame">
+  <template>
+    <style>
+    /* TODO: Why */
+    core-header-panel {
+      height: 64px;
+      z-index: 10;
+    }
+    core-toolbar {
+      /* Cyan 500 */
+      background-color: #00BCD4;
+    }
+    :host #navbar {
+      color: white;
+
+      position: absolute;
+      top: 0px;
+      width: 100%;
+    }
+
+    :host([optime-still]) #navbar {
+      position: fixed;
+      top: 0;
+    }
+
+    #toolbarTitle {
+      font-size: 1.25em;
+      font-weight: bold;
+    }
+
+    #main-panel {
+      padding: 64px 0 20px 0;
+      margin: 0;
+      background-color: #E0F7FA; /* Cyan 50 */
+      overflow-x: hidden;
+    }
+
+    @media screen and (max-width: 429px) {
+      #main-panel{
+        padding-bottom: 0;
+      }
+    }
+
+    #drawer-panel {
+      background-color: white;
+    }
+
+    core-drawer-panel::shadow #scrim {
+      z-index: 50;
+    }
+
+    core-drawer-panel::shadow #drawer {
+      z-index: 100;
+    }
+    </style>
+    <core-drawer-panel forceNarrow="true">
+      <div id="drawer-panel" drawer>
+      </div>
+      <div id="main-panel" main>
+        <core-header-panel id="navbar" flex>
+          <core-toolbar id="toolbar">
+            <paper-icon-button id="toolbarMenu" icon="menu" on-tap="{{menuAction}}" core-drawer-toggle></paper-icon-button>
+            <div id="toolbarTitle" flex>{{ pageTitle }}</div>
+            <paper-icon-button id="toolbarAdd" icon="add" on-tap="{{menuAdd}}"></core-icon-button>
+          </core-toolbar>
+        </core-header-panel>
+        <div id="card-set">
+          <content></content>
+        </div>
+      </div>
+    </core-drawer-panel>
+  </template>
+  <script>
+    Polymer({
+      pageTitle: "Loading...",
+      menuAction: function(e) {
+      },
+      menuAdd: function(e) {
+        var hint = document.querySelector("#hint-wip");
+        hint.show();
+      }
+    });
+  </script>
+</polymer-element>

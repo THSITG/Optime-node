@@ -4,7 +4,8 @@
       :host {
         margin: 20px auto 0 auto;
         width: auto;
-        display: inline;
+        /* TODO: inline worked before adding core-drawer-menu */
+        display: block;
         font-family: Calibri;
         font-size: 1.2em;
 
@@ -12,6 +13,7 @@
       }
 
       paper-shadow {
+        margin: 0 auto 0 auto;
         height: auto;
         display: block;
         box-sizing: border-box;
@@ -46,6 +48,7 @@
           margin: 0;
           border: none;
           border-bottom: #CCC 1px solid;
+          border-radius: 0;
         }
         :host {
           display: block;

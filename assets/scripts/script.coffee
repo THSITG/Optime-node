@@ -3,7 +3,7 @@ importList = [
   '/bower/paper-elements/paper-elements.html',
   '/bower/core-icons/core-icons.html',
   '/bower/core-meta/core-meta.html',
-  '/elements/navbar.html',
+  '/elements/frame.html',
   '/elements/card.html',
   '/elements/animation.html'
 ]
@@ -11,7 +11,7 @@ importList = [
 
 setupPage = () ->
   console.log "loaded"
-  $("#navbar")[0].pageTitle = "Optime"
+  document.getElementById("frame").pageTitle = "Optime"
 
   meta = document.createElement 'core-meta'
   meta.type='transition'
