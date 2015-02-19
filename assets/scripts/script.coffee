@@ -10,7 +10,7 @@ importList = [
 
 
 setupPage = () ->
-  console.log "loaded"
+  console.log("Finished loading resources")
   document.getElementById("frame").pageTitle = "Optime"
 
   meta = document.createElement 'core-meta'
@@ -26,9 +26,11 @@ setupPage = () ->
   )
 
   # Finished Load
+  console.log("Page loaded")
   $("body").addClass("optime-loaded")
   window.setTimeout( ()->
     $("#loading-overlap").remove()
+    console.log("Ready to use")
   ,500)
 
   loads = $ "[optime-auto-load]"
@@ -41,6 +43,7 @@ setupPage = () ->
 
 
 window.addEventListener "polymer-ready", (e) ->
+  console.log("Loading resources")
   $("body").addClass("optime-loading")
   Polymer.import(importList,setupPage)
 
