@@ -3,8 +3,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+
 var crypto = require('crypto');
 var md5 = crypto.createHash('md5');
+var salt = "whyimsohandsome";
 
 var path = require('path');
 var fs = require('fs');
@@ -13,7 +15,7 @@ var lessMW = require('less-middleware');
 var coffeeMW = require('connect-coffee-script');
 
 var app = express();
-var config = require('./config.js');
+var config = require('./config');
 
 // Setup Database
 
@@ -39,11 +41,10 @@ var Task = require('./schemas/task');
 var User = require('./schemas/user');
 var Board = require('./schemas/board');
 
-// Login Logic
+// passport local strategy config
 
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
-
 passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
@@ -53,16 +54,17 @@ passport.use(new LocalStrategy({
         if (!user) {
             return done(null, false, { message: 'Incorrect email.' });
         }
-        token = email + password;
+        token = password + email + salt;
         md5.update(token);
-        var encrypted = md5.digest('base64');
-        if (encrypted != user.password) {
+        if (md5.digest('base64') != user.password) {
             return done(null, false, { message: 'Incorrect password.' });
         }
         return done(null, user);
     });
     }
 ));
+
+// routes requirment
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -100,6 +102,8 @@ app.use(coffeeMW({
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/bower', bowers);
+
+// routes config
 
 app.use('/', index);
 app.use('/users', users);
