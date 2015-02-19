@@ -3,6 +3,7 @@ var router = express.Router();
 
 var crypto = require('crypto');
 var md5 = crypto.createHash('md5');
+var salt = "whyimsohandsome";
 
 var User = require('../schemas/user');
 
@@ -12,7 +13,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/', function(req, res, next) {
 
-	token = req.body.password + req.body.email;
+	token = req.body.password + req.body.email + salt;
 	md5.update(token);
 	var password = md5.digest('base64');
 
