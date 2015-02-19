@@ -43,10 +43,13 @@
       @media (max-width: 429px) {
         paper-shadow {
           width: 100%;
+          margin: 0;
+          border: none;
+          border-bottom: #CCC 1px solid;
         }
         :host {
           display: block;
-          margin: 20px 10px 0 10px;
+          margin: 0;
         }
       }
 
@@ -68,7 +71,9 @@
       }
 
     </style>
-    <paper-shadow id="container" z='{{z}}'>
+    <core-media-query query="max-width: 429px" queryMatches="{{narrowScreen}}">
+    </core-media-query>
+    <paper-shadow id="container" animated="true">
       <content></content>
       <div horizontal layout reverse>
         <template bind="{{acceptAction as acceptAction}}" if="{{acceptable}}">
@@ -82,7 +87,11 @@
   </template>
   <script>
     Polymer({
-      z: 1,
+      z: 4,
+      zChanged: function() {
+        shadow.setZ(narrowScreen?0:z);
+      },
+
       acceptText: "Accept",
       dismissText: "Dismiss",
       acceptable: false,
@@ -110,10 +119,16 @@
       ready: function() {
         this.acceptable=this.hasAttribute("acceptable");
         this.dismissable=this.hasAttribute("dismissable");
+        var query=this.shadowRoot.querySelector("core-media-query");
+        var shadow=this.shadowRoot.querySelector("paper-shadow");
+        var elem=this;
+        query.addEventListener('core-media-change',function() {
+          shadow.setZ(elem.narrowScreen?0:elem.z);
+        });
       },
       getInnerHeight: function() {
-        var cont=$(this.shadowRoot).children("paper-shadow");
-        return window.getComputedStyle(cont[0]).height;
+        var cont=this.shadowRoot.querySelector("paper-shadow");
+        return window.getComputedStyle(cont).height;
       }
     });
   </script>
