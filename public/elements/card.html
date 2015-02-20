@@ -110,7 +110,9 @@
       hide: function() {
         if(!this.shown) return false;
         this.shown=false;
-        if(this.transitionMethod) this.transitionMethod.teardown(this);
+        if(this.transitionMethod) this.transitionMethod.teardown(this,function(node) {
+          node.parentNode.removeChild(node);
+        });
         else this.style.opacity="0";
         return true;
       },

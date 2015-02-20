@@ -15,7 +15,6 @@ setupPage = () ->
 
   meta = document.createElement 'core-meta'
   meta.type='transition'
-  transition = meta.byId "optime-card-fade"
   targets = $ "[optime-animation]"
   targets.each( (i) ->
     meta = document.createElement 'core-meta'

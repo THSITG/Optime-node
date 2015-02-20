@@ -6,30 +6,34 @@
 	node.setAttribute("optime-status",'hidden');
       },
 
-      go: function(node) {
+      go: function(node,callback) {
+        if(!callback) callback=this.complete;
         node.style.height = node.getInnerHeight();
-	node.setAttribute("optime-status",'placed');
+        node.setAttribute("optime-status",'placed');
         window.setTimeout(function() {
           node.setAttribute("optime-status",'shown');
           node.style.height = 'auto';
+          window.setTimeout(function() {
+            callback(node);
+          });
         },500);
       },
 
-      teardown: function(node) {
-        var callback=this.complete;
+      teardown: function(node,callback) {
+        if(!callback) callback=this.complete;
         node.style.height = node.getInnerHeight();
-	node.setAttribute("optime-status",'dismissed');
-	window.setTimeout(function() {
+        node.setAttribute("optime-status",'dismissed');
+        window.setTimeout(function() {
           node.setAttribute("optime-status","hidden");
-        node.style.height = "0";
+          node.style.height = "0";
           window.setTimeout(function() {
             callback(node);
           },500);
-	},500);
+        },500);
       },
 
       complete: function(node) {
-        console.log("Node has been dismissed");
+        console.log("Animation preformed");
       }
     });
   </script>
