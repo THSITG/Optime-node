@@ -12,11 +12,25 @@ router.post('/', function(req, res, next) {
     console.log(err);
     if(err) return next(err);
     if(!user) {
-      res.write(info);
-      return next(req,res);
+      console.log("2nd branch: ",info);
+      res.write(JSON.stringify({
+        success: false,
+        info: info
+      }));
+      res.send();
+      return true;
     } else {
-      res.write("Complete");
-      return next(req,res);
+      console.log("3nd branch: ",user);
+      res.write(JSON.stringify({
+        success: true,
+        user: {
+          name: user.name,
+          email: user.email,
+          boards: user.boards
+        }
+      }));
+      res.send();
+      return true;
     }
   })(req,res,next);
 });

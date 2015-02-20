@@ -51,6 +51,7 @@ passport.use(new LocalStrategy({
     passwordField: 'password'
   }, function(email, password, done) {
     var query=User.findOne({ email: email });
+    query.select('name email boards password');
     query.exec(function(err,user) {
       if (err) { return done(err); }
       if (!user) {
