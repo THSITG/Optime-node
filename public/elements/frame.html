@@ -74,12 +74,61 @@
   </template>
   <script>
     Polymer({
+      cardCount: 0,
       pageTitle: "Loading...",
       menuAction: function(e) {
       },
       menuAdd: function(e) {
-        var hint = document.querySelector("#hint-wip");
-        hint.show();
+        var hintCard = document.createElement("optime-card");
+        var hintTitleNode = document.createElement("h1");
+        hintTitleNode.appendChild(document.createTextNode("Optime"));
+        var hintPara1 = document.createElement("p");
+        hintPara1.appendChild(document.createTextNode("It's working in progress."));
+        var hintPara2 = document.createElement("p");
+        hintPara2.appendChild(document.createTextNode("For futher information, please log in to "));
+        var hintLink = document.createElement("a");
+        hintLink.setAttribute("href","http://op-ti.me");
+        hintLink.appendChild(document.createTextNode("op-ti.me"));
+        hintPara2.appendChild(hintLink);
+        hintPara2.appendChild(document.createTextNode(" to explore more."));
+        hintCard.appendChild(hintTitleNode);
+        hintCard.appendChild(hintPara1);
+        hintCard.appendChild(hintPara2);
+
+        hintCard.dismissable=true;
+        hintCard.acceptable=false;
+        hintCard.dismissText="Got it";
+        hintCard.setAttribute("wide","");
+
+        meta = document.createElement('core-meta');
+        meta.type='transition';
+        meta.byId("optime-card-fade").setup(hintCard);
+
+        this.insertCard(hintCard);
+      },
+
+      insertCard: function(card,position) {
+        position = (typeof position !== 'undefined') ? position : 0;
+        if(position < 0 || position > this.cardCount) throw { name: "optime:frame:invalidPosition", message: "Invalid card position: "+position};
+        else {
+          var inserted;
+          if(position == this.cardCount) inserted=this.appendChild(card);
+          else inserted=this.insertBefore(card,this.children[position]);
+          this.cardCount += 1;
+
+          /* Wait the templates to initialize
+           * Or the calculated height will be incorrect 
+           */
+          window.setTimeout(function() {
+            inserted.show();
+          },0);
+
+          return inserted;
+        }
+      },
+
+      ready: function() {
+        this.cardCount = this.children.length;
       }
     });
   </script>

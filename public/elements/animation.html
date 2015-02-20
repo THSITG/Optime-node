@@ -3,13 +3,15 @@
     Polymer({
       setup: function(node) {
         node.transitionMethod=this;
-	node.setAttribute("optime-status",'hidden');
+        node.setAttribute("optime-status",'hidden');
       },
 
       go: function(node,callback) {
         if(!callback) callback=this.complete;
         node.style.height = node.getInnerHeight();
         node.setAttribute("optime-status",'placed');
+        window.setTimeout(function() {
+        },10);
         window.setTimeout(function() {
           node.setAttribute("optime-status",'shown');
           node.style.height = 'auto';

@@ -46,4 +46,3 @@ window.addEventListener "polymer-ready", (e) ->
   $("body").addClass("optime-loading")
   Polymer.import(importList,setupPage)
 
-
