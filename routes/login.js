@@ -7,12 +7,9 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-  console.log(req.body);
   passport.authenticate('local', function(err,user,info) { 
-    console.log(err);
     if(err) return next(err);
     if(!user) {
-      console.log("2nd branch: ",info);
       res.write(JSON.stringify({
         success: false,
         info: info
@@ -20,7 +17,6 @@ router.post('/', function(req, res, next) {
       res.send();
       return true;
     } else {
-      console.log("3nd branch: ",user);
       res.write(JSON.stringify({
         success: true,
         user: {

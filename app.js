@@ -4,9 +4,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var crypto = require('crypto');
-var salt = "whyimsohandsome";
-
 var path = require('path');
 var fs = require('fs');
 
@@ -49,21 +46,18 @@ var passport = require('passport')
 passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
-  }, function(email, password, done) {
+  }, function(email, inputPassword, done) {
     var query=User.findOne({ email: email });
     query.select('name email boards password');
     query.exec(function(err,user) {
       if (err) { return done(err); }
       if (!user) {
         return done(null, false, { message: 'Incorrect email.' });
-      }
-      var md5 = crypto.createHash('md5');
-      token = password + email + salt;
-      md5.update(token);
-      if (md5.digest('base64') != user.password) {
+      } if (user.validatePassword(inputPassword)) {
+        return done(null, user);
+      } else {
         return done(null, false, { message: 'Incorrect password.' });
       }
-      return done(null, user);
     });
   }
 ));
@@ -151,13 +145,10 @@ app.use(function(err, req, res, next) {
   var uname="CircuitCoder";
   var email="circuitcoder0@gmail.com";
   var passwd="iampassword";
-  var md5 = crypto.createHash('md5');
-  md5.update(passwd+email+salt);
-  var calcPasswd=md5.digest('base64');
   new User({
     name: uname,
     email: email,
-    password: calcPasswd,
+    password: User.hashPassword(email,passwd),
     boards: []
   }).save(function(err,user) {
     if (err) console.error(err);
