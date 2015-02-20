@@ -23,7 +23,7 @@
       top: 0;
     }
 
-    #toolbarTitle {
+    #toolbar-title {
       font-size: 1.25em;
       font-weight: bold;
     }
@@ -69,15 +69,59 @@
       line-height: 80px;
       text-align: center;
     }
+
+    #toolbar-account {
+      height: 36px;
+      width: 36px;
+      border-radius: 18px;
+
+      margin: 0 8px;
+      cursor: pointer;
+    }
+
+    #toolbar-account-avatar {
+      padding: 2px;
+    }
+
+    #toolbar-account-avatar::shadow core-icon {
+      width: 36px;
+      height: 36px;
+    }
+
+    #toolbar-account-avatar::shadow core-icon div {
+      border-radius: 50%;
+    }
+
+    [status='logged-in'] #toolbar-account-icon {
+      display: none;
+    }
+
+    [status='logged-in'] #toolbar-account-avatar {
+      display: block;
+    }
+
+    [status='logged-out'] #toolbar-account-icon {
+      display: block;
+    }
+
+    [status='logged-out'] #toolbar-account-avatar {
+      display: none;
+    }
+
     </style>
     <core-drawer-panel forceNarrow="true">
       <div id="drawer-panel" drawer>
       </div>
       <div id="main-panel" main>
         <core-header-panel id="navbar" flex>
-          <core-toolbar id="toolbar">
-            <paper-icon-button id="toolbarMenu" icon="menu" on-tap="{{menuAction}}" core-drawer-toggle></paper-icon-button>
-            <div id="toolbarTitle" flex>{{ pageTitle }}</div>
+          <core-toolbar id="toolbar" status="{{loggedIn ? 'logged-in' : 'logged-out'}}">
+
+            <paper-icon-button id="toolbar-drawer" icon="menu" on-tap="{{drawerAction}}" core-drawer-toggle></paper-icon-button>
+            <div id="toolbar-title" flex>{{ pageTitle }}</div>
+
+            <paper-icon-button id="toolbar-account-icon" icon="account-circle" on-tap="{{loginAction}}"></paper-icon-button>
+            <paper-icon-button id="toolbar-account-avatar" src="{{ userAvatarLink }}" on-tap="{{accountAction}}"></paper-icon-button>
+
           </core-toolbar>
         </core-header-panel>
         <div id="card-set">
@@ -92,7 +136,14 @@
     Polymer({
       cardCount: 0,
       pageTitle: "Loading...",
-      menuAction: function(e) {
+
+      loggedIn: false,
+      username: "CircuitCoder",
+      userAvatarLink: "http://www.gravatar.com/avatar/029df89b7e24e1a99b717230e0733bbf.png",
+
+      drawerAction: function(e) {},
+      accountAction: function(e) {
+        this.loggedIn=!this.loggedIn;
       },
       fabAdd: function(e) {
         var hintCard = document.createElement("optime-card");
