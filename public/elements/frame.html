@@ -29,7 +29,7 @@
     }
 
     #main-panel {
-      padding: 64px 0 20px 0;
+      padding: 64px 0 0 0;
       margin: 0;
       background-color: #E0F7FA; /* Cyan 50 */
       overflow-x: hidden;
@@ -38,7 +38,6 @@
 
     @media screen and (max-width: 429px) {
       #main-panel{
-        padding-bottom: 0;
         background-color: #EEEEEE; /* Grey 200 */
       }
     }
@@ -54,6 +53,22 @@
     core-drawer-panel::shadow #drawer {
       z-index: 100;
     }
+
+    #fab-add {
+      position: fixed;
+      bottom: 12px;
+      right: 12px;
+      background-color: #F44336; /* Red 500 */
+      color: white;
+    }
+
+    #loading-indicator {
+      color: rgba(0,0,0,0.26);
+      display: block;
+      height: 80px;
+      line-height: 80px;
+      text-align: center;
+    }
     </style>
     <core-drawer-panel forceNarrow="true">
       <div id="drawer-panel" drawer>
@@ -63,12 +78,13 @@
           <core-toolbar id="toolbar">
             <paper-icon-button id="toolbarMenu" icon="menu" on-tap="{{menuAction}}" core-drawer-toggle></paper-icon-button>
             <div id="toolbarTitle" flex>{{ pageTitle }}</div>
-            <paper-icon-button id="toolbarAdd" icon="add" on-tap="{{menuAdd}}"></core-icon-button>
           </core-toolbar>
         </core-header-panel>
         <div id="card-set">
           <content></content>
+          <div id="loading-indicator">No more task</div>
         </div>
+        <paper-fab id="fab-add" icon="add" on-tap="{{fabAdd}}"></paper-fab>
       </div>
     </core-drawer-panel>
   </template>
@@ -78,7 +94,7 @@
       pageTitle: "Loading...",
       menuAction: function(e) {
       },
-      menuAdd: function(e) {
+      fabAdd: function(e) {
         var hintCard = document.createElement("optime-card");
         var hintTitleNode = document.createElement("h1");
         hintTitleNode.appendChild(document.createTextNode("Optime"));
