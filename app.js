@@ -5,7 +5,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var crypto = require('crypto');
-var md5 = crypto.createHash('md5');
 var salt = "whyimsohandsome";
 
 var path = require('path');
@@ -34,6 +33,8 @@ if(config.get("database:port")) {
 }
 mongoConnStr += "/" + config.get("database:name");
 
+console.log("Database Str: "+mongoConnStr);
+
 var mongoose = require('mongoose');
 mongoose.connect(mongoConnStr);
 
@@ -44,24 +45,26 @@ var Board = require('./schemas/board');
 // passport local strategy config
 
 var passport = require('passport')
-  , LocalStrategy = require('passport-local').Strategy;
+    , LocalStrategy = require('passport-local').Strategy;
 passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
-}, function(email, password, done) {
-    User.findOne({ email: email }, function (err, user) {
-        if (err) { return done(err); }
-        if (!user) {
-            return done(null, false, { message: 'Incorrect email.' });
-        }
-        token = password + email + salt;
-        md5.update(token);
-        if (md5.digest('base64') != user.password) {
-            return done(null, false, { message: 'Incorrect password.' });
-        }
-        return done(null, user);
+  }, function(email, password, done) {
+    var query=User.findOne({ email: email });
+    query.exec(function(err,user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect email.' });
+      }
+      var md5 = crypto.createHash('md5');
+      token = password + email + salt;
+      md5.update(token);
+      if (md5.digest('base64') != user.password) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
     });
-    }
+  }
 ));
 
 // routes requirment
@@ -141,5 +144,24 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
+
+// Test data
+(function() {
+  var uname="CircuitCoder";
+  var email="circuitcoder0@gmail.com";
+  var passwd="iampassword";
+  var md5 = crypto.createHash('md5');
+  md5.update(passwd+email+salt);
+  var calcPasswd=md5.digest('base64');
+  new User({
+    name: uname,
+    email: email,
+    password: calcPasswd,
+    boards: []
+  }).save(function(err,user) {
+    if (err) console.error(err);
+    console.log(user);
+  });
+})();
 
 module.exports = app;

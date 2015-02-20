@@ -1,4 +1,5 @@
 var express = require('express');
+var passport = require('passport');
 var router = express.Router();
 
 router.get('/', function(req, res, next) {
@@ -6,10 +7,18 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-		passport.authenticate('local', { 
-  			successRedirect: '/users' + req.user.email,
-  			failureRedirect: '/login'
-  	});
+  console.log(req.body);
+  passport.authenticate('local', function(err,user,info) { 
+    console.log(err);
+    if(err) return next(err);
+    if(!user) {
+      res.write(info);
+      return next(req,res);
+    } else {
+      res.write("Complete");
+      return next(req,res);
+    }
+  })(req,res,next);
 });
 
 module.exports = router;
