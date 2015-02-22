@@ -83,10 +83,10 @@
       <content></content>
       <div horizontal layout reverse>
         <template bind="{{acceptAction as acceptAction}}" if="{{acceptable}}">
-          <paper-button on-tap="{{acceptAction}}">{{acceptText}}</paper-button>
+          <paper-button on-tap="{{acceptAction}}" disabled?="{{acceptDisabled}}">{{acceptText}}</paper-button>
         </template>
         <template bind="{{dismissAction as dismissAction}}" if="{{dismissable}}">
-          <paper-button on-tap="{{dismissAction}}">{{dismissText}}</paper-button>
+          <paper-button on-tap="{{dismissAction}}" disabled?="{{dismissDisabled}}">{{dismissText}}</paper-button>
         </template>
       </div>
     </paper-shadow>
@@ -102,6 +102,8 @@
       dismissText: "Dismiss",
       acceptable: false,
       dismissable: false,
+      acceptDisabled: false,
+      dismissDisabled: false,
 
       removeAfterDismiss: true,
 

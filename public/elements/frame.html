@@ -153,14 +153,49 @@
 
       drawerAction: function(e) {},
       loginAction: function(e) {
-        this.loggedIn = true;
+        var loginCard = document.createElement("optime-card");
+        var loginCardContent = $.render["tmpl-login"]({});
+        loginCard.innerHTML=loginCardContent;
+
+        var emailDecorator=loginCard.querySelector("#loginEmail");
+        var passwdDecorator=loginCard.querySelector("#loginPasswd");
+        var emailField=emailDecorator.querySelector("input");
+        var passwdField=passwdDecorator.querySelector("input");
+        function validateCallback() {
+          // Wait to update the input
+          window.setTimeout(function() {
+            if(emailDecorator.validate() && passwdDecorator.validate())
+              loginCard.acceptDisabled=false;
+            else loginCard.acceptDisabled=true;
+            console.log(loginCard.acceptDisabled);
+          },0);
+        }
+        emailField.addEventListener("keydown",validateCallback);
+        passwdField.addEventListener("keydown",validateCallback);
+
+        loginCard.dismissable=true;
+        loginCard.acceptable=true;
+        loginCard.dismissDisabled=false;
+        loginCard.acceptDisabled=true;
+        loginCard.dismissText="Dismiss";
+        loginCard.acceptText="Submit";
+        loginCard.acceptAction = function() {
+          console.log("hahaha");
+        }
+        loginCard.setAttribute("wide","");
+
+        meta = document.createElement('core-meta');
+        meta.type='transition';
+        meta.byId("optime-card-fade").setup(loginCard);
+
+        this.insertCard(loginCard);
       },
       accountAction: function(e) {
         this.loggedIn=false;
       },
       fabAdd: function(e) {
         var hintCard = document.createElement("optime-card");
-        hintCardContent = $.render["tmpl-wip-hint"]({});
+        var hintCardContent = $.render["tmpl-wip-hint"]({});
         hintCard.innerHTML=hintCardContent;
 
         hintCard.dismissable=true;
