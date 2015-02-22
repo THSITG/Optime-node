@@ -5,7 +5,7 @@ importList = [
   '/bower/core-meta/core-meta.html',
   '/elements/frame.html',
   '/elements/card.html',
-  '/elements/animation.html'
+  '/elements/animation.html',
 ]
 
 
@@ -13,6 +13,12 @@ setupPage = () ->
   console.log("Finished loading resources")
   document.getElementById("frame").pageTitle = "Optime"
 
+  # Setup templates
+  $(".optime-tmpl").each( (it) ->
+    $.templates this.id,"#"+this.id
+  )
+
+  # Set cards' animation methods
   meta = document.createElement 'core-meta'
   meta.type='transition'
   targets = $ "[optime-animation]"
@@ -32,6 +38,7 @@ setupPage = () ->
     console.log("Ready to use")
   ,500)
 
+  # Auto-loads cards
   loads = $ "[optime-auto-load]"
   it = 0
   loader = () ->

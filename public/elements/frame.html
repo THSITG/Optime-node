@@ -160,20 +160,8 @@
       },
       fabAdd: function(e) {
         var hintCard = document.createElement("optime-card");
-        var hintTitleNode = document.createElement("h1");
-        hintTitleNode.appendChild(document.createTextNode("Optime"));
-        var hintPara1 = document.createElement("p");
-        hintPara1.appendChild(document.createTextNode("It's working in progress."));
-        var hintPara2 = document.createElement("p");
-        hintPara2.appendChild(document.createTextNode("For futher information, please log in to "));
-        var hintLink = document.createElement("a");
-        hintLink.setAttribute("href","http://op-ti.me");
-        hintLink.appendChild(document.createTextNode("op-ti.me"));
-        hintPara2.appendChild(hintLink);
-        hintPara2.appendChild(document.createTextNode(" to explore more."));
-        hintCard.appendChild(hintTitleNode);
-        hintCard.appendChild(hintPara1);
-        hintCard.appendChild(hintPara2);
+        hintCardContent = $.render["tmpl-wip-hint"]({});
+        hintCard.innerHTML=hintCardContent;
 
         hintCard.dismissable=true;
         hintCard.acceptable=false;
