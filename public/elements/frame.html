@@ -79,6 +79,10 @@
       cursor: pointer;
     }
 
+    #toolbar-account-icon {
+      left: 56px;
+    }
+
     #toolbar-account-avatar {
       padding: 2px;
     }
@@ -93,19 +97,25 @@
     }
 
     [status='logged-in'] #toolbar-account-icon {
-      display: none;
+      transition: transform 0.25s ease-in;
+      transform: rotateY(90deg);
     }
 
     [status='logged-in'] #toolbar-account-avatar {
-      display: block;
+      transition: transform 0.25s ease-out;
+      transition-delay: 0.25s;
+      transform: rotateY(0);
     }
 
     [status='logged-out'] #toolbar-account-icon {
-      display: block;
+      transition: transform 0.25s ease-out;
+      transition-delay: 0.25s;
+      transform: rotateY(0);
     }
 
     [status='logged-out'] #toolbar-account-avatar {
-      display: none;
+      transition: transform 0.25s ease-in;
+      transform: rotateY(90deg);
     }
 
     </style>
@@ -142,8 +152,11 @@
       userAvatarLink: "http://www.gravatar.com/avatar/029df89b7e24e1a99b717230e0733bbf.png",
 
       drawerAction: function(e) {},
+      loginAction: function(e) {
+        this.loggedIn = true;
+      },
       accountAction: function(e) {
-        this.loggedIn=!this.loggedIn;
+        this.loggedIn=false;
       },
       fabAdd: function(e) {
         var hintCard = document.createElement("optime-card");
