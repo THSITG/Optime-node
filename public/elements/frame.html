@@ -153,6 +153,8 @@
 
       drawerAction: function(e) {},
       loginAction: function(e) {
+        var frame=this;
+
         var loginCard = document.createElement("optime-card");
         var loginCardContent = $.render["tmpl-login"]({});
         loginCard.innerHTML=loginCardContent;
@@ -161,7 +163,9 @@
         var passwdDecorator=loginCard.querySelector("#loginPasswd");
         var emailField=emailDecorator.querySelector("input");
         var passwdField=passwdDecorator.querySelector("input");
+        var errorBox=loginCard.querySelector("#login-error");
         function validateCallback() {
+          errorBox.style.opacity="0";
           // Wait to update the input
           window.setTimeout(function() {
             if(emailDecorator.validate() && passwdDecorator.validate())
@@ -180,7 +184,19 @@
         loginCard.dismissText="Dismiss";
         loginCard.acceptText="Submit";
         loginCard.acceptAction = function() {
-          console.log("hahaha");
+          $.post("/login",{
+            email: emailField.value,
+            password: passwdField.value
+          },function(data) {
+            if(!data.success) {
+              console.log(data.info.message);
+              errorBox.style.opacity="1";
+              errorBox.innerHTML = data.info.message;
+            } else {
+              frame.loggedIn=true;
+              loginCard.hide();
+            }
+          });
         }
         loginCard.setAttribute("wide","");
 

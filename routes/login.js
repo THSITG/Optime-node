@@ -8,6 +8,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/', function(req, res, next) {
   passport.authenticate('local', function(err,user,info) { 
+    res.setHeader("Content-Type","application/json");
     if(err) return next(err);
     if(!user) {
       res.write(JSON.stringify({
