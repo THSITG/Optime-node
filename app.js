@@ -53,7 +53,9 @@ passport.use(new LocalStrategy({
       if (err) { return done(err); }
       if (!user) {
         return done(null, false, { message: 'Incorrect email.' });
-      } if (user.validatePassword(inputPassword)) {
+      } else if (!user.active) {
+        return done(null, false, { message: 'Please activate your account first' });
+      } else if (user.validatePassword(inputPassword)) {
         return done(null, user);
       } else {
         return done(null, false, { message: 'Incorrect password.' });
@@ -149,7 +151,43 @@ app.use(function(err, req, res, next) {
     name: uname,
     email: email,
     password: User.hashPassword(email,passwd),
-    boards: []
+    boards: [],
+    active: true,
+    comfirm: ""
+  }).save(function(err,user) {
+    if (err) console.error(err);
+    console.log(user);
+  });
+})();
+
+(function() {
+  var uname="DAN";
+  var email="igaryhe@gmail.com";
+  var passwd="iamalsopassword";
+  new User({
+    name: uname,
+    email: email,
+    password: User.hashPassword(email,passwd),
+    boards: [],
+    active: true,
+    comfirm: ""
+  }).save(function(err,user) {
+    if (err) console.error(err);
+    console.log(user);
+  });
+})();
+
+(function() {
+  var uname="XU";
+  var email="xujiazhao@bjmun.org";
+  var passwd="iamnotpassword";
+  new User({
+    name: uname,
+    email: email,
+    password: User.hashPassword(email,passwd),
+    boards: [],
+    active: false, 
+    comfirm: ""
   }).save(function(err,user) {
     if (err) console.error(err);
     console.log(user);
