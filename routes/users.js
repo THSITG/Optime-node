@@ -3,13 +3,16 @@ var router = express.Router();
 var User = require('../schemas/user');
 var Board = require('../schemas/board');
 var Task = require('../schemas/task');
+var crypto = require('crypto');
 
 function generateBoardID() {
-  return 1;
+  var buf = crypto.randomBytes(6);
+  return buf.toString('base64');
 }
 
 function generateTaskID() {
-  return 1;
+  var buf = crypto.randomBytes(8);
+  return buf.toString('base64');
 }
 
 // 获取主页面
