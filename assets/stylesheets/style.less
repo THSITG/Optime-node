@@ -64,6 +64,35 @@ body.optime-loaded #loading-overlap {
   }
 }
 
+// Login
+
+#login-title {
+  transition: opacity 0.1s ease-out;
+  opacity: 1;
+  margin-bottom: 0;
+}
+
+#login-title[changing] {
+  transition: opacity 0.1s ease-in;
+  opacity: 0;
+}
+
+#login-bar {
+  height: 2em;
+  line-height: 2em;
+  margin-bottom: 1.34em;
+}
+
+#login-switcher {
+  position: relative;
+  top: 10px;
+}
+
+#login-switcher-hint {
+  margin-right: 6px;
+  color: rgba(0,0,0,26%);
+}
+
 #login-error {
   line-height: 20px;
   height: 20px;

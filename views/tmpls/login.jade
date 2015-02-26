@@ -1,5 +1,9 @@
 script(id="tmpl-login", class="optime-tmpl", type="text/x-jsrender")
-  h1 Login
+  div(id="login-bar",horizontal,layout)
+    h1(id="login-title") Login
+    div(id="login-placeholder", flex)
+    span(id="login-switcher-hint") New user?
+    paper-toggle-button(id="login-switcher")/
   div(id="login-error")
   paper-input-decorator(id="loginEmail",label="Email",floatingLabel="true",autoValidate="true",error="Please enter a valid email address")
     input(is="cure-input",type="email",required="true")

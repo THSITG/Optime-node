@@ -159,6 +159,22 @@
         var loginCardContent = $.render["tmpl-login"]({});
         loginCard.innerHTML=loginCardContent;
 
+        var title = loginCard.querySelector("#login-title");
+        var switcher = loginCard.querySelector("#login-switcher");
+        switcher.addEventListener("core-change", function(e) {
+          title.setAttribute("changing","");
+          window.setTimeout(function() {
+            if(e.target.checked) {
+              loginCard.register=true;
+              title.innerHTML="Register";
+            } else {
+              loginCard.register=false;
+              title.innerHTML="Login";
+            }
+            title.removeAttribute("changing");
+          },100);
+        });
+
         var emailDecorator=loginCard.querySelector("#loginEmail");
         var passwdDecorator=loginCard.querySelector("#loginPasswd");
         var emailField=emailDecorator.querySelector("input");
