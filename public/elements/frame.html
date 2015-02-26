@@ -149,7 +149,7 @@
 
       loggedIn: false,
       username: "CircuitCoder",
-      userAvatarLink: "http://www.gravatar.com/avatar/029df89b7e24e1a99b717230e0733bbf.png",
+      userAvatarLink: "",
 
       drawerAction: function(e) {},
       loginAction: function(e) {
@@ -183,10 +183,11 @@
         loginCard.dismissText="Dismiss";
         loginCard.acceptText="Submit";
         loginCard.acceptAction = function() {
-          $.post("/login",{
+          var postData = {
             email: emailField.value,
             password: passwdField.value
-          },function(data) {
+          }
+          $.post("/login", postData, function(data) {
             if(!data.success) {
               console.log(data.info.message);
               errorBox.style.opacity="1";
@@ -194,6 +195,10 @@
             } else {
               frame.loggedIn=true;
               loginCard.hide();
+              
+              gravatarHash = md5(postData.email.trim().toLowerCase());
+              frame.userAvatarLink = "https://www.gravatar.com/avatar/" + gravatarHash + "?d=mm";
+              console.log(frame.userAvatarLink);
             }
           });
         }
