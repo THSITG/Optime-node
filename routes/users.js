@@ -6,14 +6,48 @@ var Task = require('../schemas/task');
 
 // 获取主页面
 router.get('/:uid', function(req, res, next) {
+  var callback = {};
 	User.findOne({name: req.params.uid}, function(err, user){
     if(err) console.log(err);
     if (!user) {
       res.send({error: 'no user'});
     } else {
+      callback.username = user.name;
+      var boardsName = [];
+      var tasks = [];
+      for (bid in user.boards) {
+        Board.findOne({id: bid.id}, function(err, board) {
+          if(err) console.log(err);
+          if(!board) {
+            res.send({error: 'no board'});
+          } else {
+            boardsName.push(board.name);
+            callback.boardsName = boardsName;
+            Board.findOne({id: user.initboard}, function(err, board) {
+              if(err) console.log(err);
+              if(!board){
+                res.send({error: 'no board'});
+              } else {
+              for (tid in board.tasks) {
+                if(err) console.log(err);
+                if(!task) {
+                  res.send({error: 'no task'});
+                } else {
+                  Task.findOne({id: tid.id}, function(err, task) {
+                    tasks.push(task);
+                    callback.tasks = tasks;
+                    res.send(callback);
+              });
+            }
+          }
+        }  
+      });
+          }
+        });
+      }
       
     }
-  })
+  });
 });
 
 // 获取某个 board
