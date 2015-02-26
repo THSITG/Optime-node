@@ -15,13 +15,13 @@ var config = require('./config');
 
 // Setup Database
 
-var mongoConnStr = "mongodb://"
+var mongoConnStr = "mongodb://";
 
 if(config.get("database:username") != null && config.get("database:password") != null) {
   mongoConnStr += config.get("database:username")
-  + ":"
-  + config.get("database:password")
-  + "@";
+    + ":"
+    + config.get("database:password")
+    + "@";
 }
 
 mongoConnStr += config.get("database:host");
@@ -42,28 +42,28 @@ var Board = require('./schemas/board');
 // passport local strategy config
 
 var passport = require('passport')
-    , LocalStrategy = require('passport-local').Strategy;
+, LocalStrategy = require('passport-local').Strategy;
 passport.use(new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password'
-  }, function(email, inputPassword, done) {
-    var query = User.findOne({ email: email });
-    query.select('name email boards password active');
-    query.exec(function(err,user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect email.' });
-      } else if (!user.active) {
-        console.log(user);
-        return done(null, false, { message: 'Please activate your account first' });
-      } else if (user.validatePassword(inputPassword)) {
-        return done(null, user);
-      } else {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-    });
-  }
-));
+  usernameField: 'email',
+  passwordField: 'password'
+}, function(email, inputPassword, done) {
+  var query = User.findOne({ email: email });
+  query.select('name email boards password active');
+  query.exec(function(err,user) {
+    if (err) { return done(err); }
+    if (!user) {
+      return done(null, false, { message: 'Incorrect email.' });
+    } else if (!user.active) {
+      console.log(user);
+      return done(null, false, { message: 'Please activate your account first' });
+    } else if (user.validatePassword(inputPassword)) {
+      return done(null, user);
+    } else {
+      return done(null, false, { message: 'Incorrect password.' });
+    }
+  });
+}
+                              ));
 
 // routes requirment
 
@@ -75,8 +75,8 @@ var logout = require('./routes/logout');
 var bowers = require('./routes/bowers');
 
 users.use(function (req, res, next) {
-    if (req.isAuthenticated())
-        return next();
+  if (req.isAuthenticated())
+    return next();
 });
 
 // view engine setup
@@ -112,9 +112,9 @@ app.use('/logout', logout);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
 // error handlers
@@ -122,23 +122,23 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+      message: err.message,
+      error: err
     });
+  });
 }
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
 });
 
 // Test data

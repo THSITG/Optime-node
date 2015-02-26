@@ -18,25 +18,22 @@ function generateTaskID() {
 
 // 获取主页面
 router.get('/:uid', function(req, res, next) {
-  var runningCallback=0;
   var result = {};
   result.tasks=[];
 	User.findOne({name: req.params.uid}, function(err, user){
 
     if(err) console.log(err);
-    if (!user) {
-      res.send({error: 'no user'});
-    } else {
+    if (user) {
       result.username = user.name;
       var boardsName = [];
       var tasks = [];
       var calls=[];
-      for (var sbid in (user.boards.toObject())) {
+      for (var bid in (user.boards.toObject())) {
         calls.push(function(callback) {
-          Board.findOne({id: user.boards.toObject()[sbid].id}, function(err, board) {
+          Board.findOne({id: user.boards.toObject()[bid].id}, function(err, board) {
             if(err) console.log(err);
             boardsName.push(board.name);
-            callback(null,null);
+            callback(null, null);
           });
         });
       }
@@ -49,14 +46,14 @@ router.get('/:uid', function(req, res, next) {
                 Task.findOne({id: board.tasks.toObject()[tid].id}, function(err, task) {
                   if(err) console.log(err);
                   else result.tasks.push(task);
-                  callback(null,null);
+                  callback(null, null);
                 });
               });
             }
           }
           callback(null,null);
         });
-      }],function(err,asyncres) {
+      }],function(err,asyncresult) {
         async.parallel(calls, function(err, results) {
           result.boardsName = boardsName;
           res.send(result);
@@ -71,28 +68,28 @@ router.get('/:uid/boards/:bid', function(req, res, next) {
   User.findOne({name: req.params.uid}, function(err, user) {
 
     if(err) console.log(err);
-    if(!user) {
-      res.send({error: 'no user'});
-    } else {
+    if(user) {
       Board.findOne({id: req.params.bid}, function(err, board){
 
         if(err) console.log(err);
-        if(!board) {
-          res.send({error: 'no board'});
-        } else {
+        if(board) {
           var tasks = [];
-          for (tid in board.tasks) {
-            Task.findOne({id: tid.id}, function(err, task){
+          var calls = [];
+          for (tid in board.tasks.toObject()) {
+            calls.push(function(callback){
+              Task.findOne({id: board.tasks.toObject()[tid].id}, function(err, task){
 
-              if(err) console.log(err);
-              if(!task) {
-                res.send({error: 'no task'});
-              } else {
-                tasks.push(task);
-                res.send(tasks);
-              }
+                if(err) console.log(err);
+                if(task) {
+                  tasks.push(task);
+                }
+              });
+              callback(null, null);
             });
           }
+          async.parallel(calls, function(err, reseults) {
+            res.send(tasks);
+          });
         }
       });
     }
@@ -119,9 +116,7 @@ router.post('/:uid/boards', function(req, res, next) {
 
   User.findOne({name: req.params.uid}, function(err, user) {
     if(err) console.log(err);
-    if(!user) {
-      res.send({error: 'no user'});
-    } else {
+    if(user) {
       user.boards.push({id: generatedID});
       res.send({
         error: false,
@@ -129,7 +124,6 @@ router.post('/:uid/boards', function(req, res, next) {
       });
     }
   });
-  res.send();
 });
 
 // 删除 board
@@ -139,6 +133,9 @@ router.delete('/:uid/boards/:bid', function(req, res, next) {
   });
   Board.remove({id: req.params.bid}, function(err) {
     if(err) console.log(err);
+    res.send({
+      success: true
+    });
   });
 });
 
@@ -160,9 +157,7 @@ router.post('/:uid/boards/:bid/tasks', function(req, res, next) {
 
   Board.findOne({id: req.params.bid}, function(err, board) {
     if(err) console.log(err);
-    if(!board) {
-      res.send({error: 'no board'});
-    } else {
+    if(board) {
       board.tasks.push({id: generatedID});
       res.send();
     }
@@ -183,11 +178,22 @@ router.put('/:uid/boards/:bid/tasks/:tid', function(req, res, next) {
 
 // 删除 task
 router.delete('/:uid/boards/:bid/tasks/:tid', function(req, res, next) {
-	Board.findOne({name: req.params.bid}, function(err, board) {
-    board.tasks.pull({id: req.params.tid});
-  });
-  Task.remove({id: req.params.tid}, function(err) {
+	async.parallel([
+    function(callback) {
+      Board.findOne({name: req.params.bid}, function(err, board) {
+        board.tasks.pull({id: req.params.tid});
+      });
+      callback(null, null);
+    },
+    function(callback) {
+      Task.remove({id: req.params.tid}, function(err) {
+        if(err) console.log(err);
+      });
+      callback(null, null);
+    }
+  ], function(err, results) {
     if(err) console.log(err);
+    else res.send();
   });
 });
 
@@ -196,15 +202,11 @@ router.get('/:uid/boards/:bid/profile', function(req, res, next) {
 	User.findOne({name: req.params.uid}, function(err, user) {
 
     if(err) console.log(err);
-    if(!user) {
-      res.send({error: 'no user'});
-    } else {
+    if(user) {
       Board.findOne({id: req.params.bid}, function(err, board) {
-
+        
         if(err) console.log(err);
-        if(!board) {
-          res.send({error: 'no board'});
-        } else {
+        if(board) {
           res.send(board);
         }
       });
