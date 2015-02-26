@@ -48,12 +48,13 @@ passport.use(new LocalStrategy({
     passwordField: 'password'
   }, function(email, inputPassword, done) {
     var query = User.findOne({ email: email });
-    query.select('name email boards password');
+    query.select('name email boards password active');
     query.exec(function(err,user) {
       if (err) { return done(err); }
       if (!user) {
         return done(null, false, { message: 'Incorrect email.' });
       } else if (!user.active) {
+        console.log(user);
         return done(null, false, { message: 'Please activate your account first' });
       } else if (user.validatePassword(inputPassword)) {
         return done(null, user);

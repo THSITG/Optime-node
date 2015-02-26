@@ -268,20 +268,21 @@
         this.loggedIn=false;
       },
       fabAdd: function(e) {
-        var hintCard = document.createElement("optime-card");
-        var hintCardContent = $.render["tmpl-wip-hint"]({});
-        hintCard.innerHTML=hintCardContent;
+        var newTaskCard = document.createElement("optime-card");
+        var newTaskCardContent = $.render["tmpl-new-task"]({});
+        newTaskCard.innerHTML=newTaskCardContent;
 
-        hintCard.dismissable=true;
-        hintCard.acceptable=false;
-        hintCard.dismissText="Got it";
-        hintCard.setAttribute("wide","");
+        newTaskCard.dismissable=true;
+        newTaskCard.acceptable=true;
+        newTaskCard.dismissText="Cancel";
+        newTaskCard.acceptText="Submit"
+        newTaskCard.setAttribute("wide","");
 
         meta = document.createElement('core-meta');
         meta.type='transition';
-        meta.byId("optime-card-fade").setup(hintCard);
+        meta.byId("optime-card-fade").setup(newTaskCard);
 
-        this.insertCard(hintCard);
+        this.insertCard(newTaskCard);
       },
 
       insertCard: function(card,position) {

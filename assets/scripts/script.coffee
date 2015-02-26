@@ -1,6 +1,7 @@
 importList = [
   '/bower/core-elements/core-elements.html',
   '/bower/paper-elements/paper-elements.html',
+  '/bower/paper-input/paper-autogrow-textarea.html',
   '/bower/core-icons/core-icons.html',
   '/bower/core-meta/core-meta.html',
   '/elements/frame.html',

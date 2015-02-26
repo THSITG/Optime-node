@@ -1,0 +1,7 @@
+script(id="tmpl-new-task", class="optime-tmpl", type="text/x-jsrender")
+  h1 New Task
+  paper-input-decorator(class="new-task-title", label="Title", floatingLabel="true", autoValidate="false")
+    input(is="core-input",required=true)
+  paper-input-decorator(class="new-task-desc", label="Description", floatingLabel="true", autoValidate="false")
+    paper-autogrow-textarea(class="new-task-desc-wrapper")
+      textarea
