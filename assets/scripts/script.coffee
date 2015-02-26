@@ -18,6 +18,9 @@ setupPage = () ->
     $.templates this.id,"#"+this.id
   )
 
+  # Setup styles
+  CoreStyle.g.paperInput.focusedColor = "#0f9d58" # From toggle button
+
   # Set cards' animation methods
   meta = document.createElement 'core-meta'
   meta.type='transition'
