@@ -8,6 +8,8 @@ var UserSchema = new Schema({
 		name: String, // User's displayed name, variable
 		email: String, // Email, constant
 		password: String, // Hashed password
+		active: Boolean, // User Activation
+		confirm: String, // Confirm code
 		boards: [{ // User's task boards
 				id: String, // Board id
 				color: String, // Color for clients

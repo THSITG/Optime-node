@@ -3,7 +3,7 @@ var router = express.Router();
 
 // 获取主页面
 router.get('/:userid', function(req, res, next) {
-	
+
 });
 
 // 获取某个 board
