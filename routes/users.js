@@ -159,7 +159,9 @@ router.post('/:uid/boards/:bid/tasks', function(req, res, next) {
     if(err) console.log(err);
     if(board) {
       board.tasks.push({id: generatedID});
-      res.send();
+      res.send({
+        tid: generatedID
+      });
     }
   });
 });
@@ -193,7 +195,9 @@ router.delete('/:uid/boards/:bid/tasks/:tid', function(req, res, next) {
     }
   ], function(err, results) {
     if(err) console.log(err);
-    else res.send();
+    else res.send({
+      deleted: 'success'
+    });
   });
 });
 
