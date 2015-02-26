@@ -203,24 +203,58 @@
         loginCard.dismissText="Dismiss";
         loginCard.acceptText="Submit";
         loginCard.acceptAction = function() {
-          var postData = {
-            email: emailField.value,
-            password: passwdField.value
-          }
-          $.post("/login", postData, function(data) {
-            if(!data.success) {
-              console.log(data.info.message);
-              $(errorBox).addClass("shown");
-              errorBox.innerHTML = data.info.message;
-            } else {
-              frame.loggedIn=true;
-              loginCard.hide();
-              
-              gravatarHash = md5(postData.email.trim().toLowerCase());
-              frame.userAvatarLink = "https://www.gravatar.com/avatar/" + gravatarHash + "?d=mm";
-              console.log(frame.userAvatarLink);
+          if(loginCard.hasAttribute("register")) {
+            var postData = {
+              username: nameField.value,
+              email: emailField.value,
+              password: passwdField.value
             }
-          });
+            $.post("/signup",postData,function(data) {
+              if(!data.success) {
+                console.log(data.message);
+                $(errorBox).addClass("shown");
+                errorBox.innerHTML=data.message;
+              } else {
+                window.setTimeout(function() {
+                  var regHintCard = document.createElement("optime-card");
+                  var regHintCardContent = $.render["tmpl-register-hint"]({});
+                  regHintCard.innerHTML=regHintCardContent;
+
+                  regHintCard.dismissable=true;
+                  regHintCard.acceptable=false;
+
+                  regHintCard.setAttribute("wide","");
+
+                  meta = document.createElement('core-meta');
+                  meta.type='transition';
+                  meta.byId("optime-card-fade").setup(regHintCard);
+
+                  frame.insertCard(regHintCard)
+                },500);
+
+                loginCard.hide();
+              }
+            });
+          } else {
+            var postData = {
+              email: emailField.value,
+              password: passwdField.value
+            }
+            $.post("/login", postData, function(data) {
+              if(!data.success) {
+                console.log(data.info.message);
+                $(errorBox).addClass("shown");
+                errorBox.innerHTML = data.info.message;
+              } else {
+                frame.loggedIn=true;
+                loginCard.hide();
+                
+                gravatarHash = md5(postData.email.trim().toLowerCase());
+                frame.userAvatarLink = "https://www.gravatar.com/avatar/" + gravatarHash + "?d=mm";
+                console.log(frame.userAvatarLink);
+              }
+            });
+          }
         }
         loginCard.setAttribute("wide","");
 
