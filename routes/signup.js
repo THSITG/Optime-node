@@ -9,15 +9,13 @@ var confirm;
 var User = require('../schemas/user');
 
 router.post('/', function(req, res, next) {
-
 	token = req.body.password + req.body.email + salt;
 	md5.update(token);
 	var password = md5.digest('base64');
-	crypto.randomBytes(32, function(err, buf) {
-		if(err) throw err;
-		confirm = buf.toString('base64');
-	});
 
+  	var buf = crypto.randomBytes(32);
+  	var confirm = buf.toString('base64');
+ 
 	var user = new User({
 		name: req.body.email,
 		email: req.body.email,
@@ -34,17 +32,21 @@ router.post('/', function(req, res, next) {
 	var transporter = nodemailer.createTransport({
 		host: 'smtp.op-ti.me',
 		port: 25,
+		tls: {
+        	rejectUnauthorized:false
+    	},
 		auth: {
 			user: 'admin@op-ti.me',
 			pass: 'hehehe123'
 			}
 	});
-		
+	console.log(confirm);
+
 	var mailOptions = {
 		from: 'Optime <admin@op-ti.me>',
 		to: req.body.email,
 		subject: 'Welcome to Optime',
-		html: '<p>click the link to confirm your email: <a>https://op-ti.me/signup/confirm?code=' + confirm;
+		html: '<p>click the link to confirm your email: <a>https://op-ti.me/signup/confirm?code=' + confirm + '</a></p>'
 	};
 
 	transporter.sendMail(mailOptions, function(error, info){
@@ -56,7 +58,7 @@ router.post('/', function(req, res, next) {
 	});
 });
 
-router.post('/confirm', function(req, res, next) {
+router.get('/confirm', function(req, res, next) {
 	code = req.query.code;
 	var query = User.findOne({confirm: code});
 	query.select('name email active');
