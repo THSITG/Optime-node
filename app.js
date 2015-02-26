@@ -150,7 +150,8 @@ app.use(function(err, req, res, next) {
     name: uname,
     email: email,
     password: User.hashPassword(email,passwd),
-    boards: [],
+    initboard: 1,
+    boards: [{id: 1}],
     active: true,
     comfirm: ""
   }).save(function(err,user) {
@@ -190,6 +191,31 @@ app.use(function(err, req, res, next) {
   }).save(function(err,user) {
     if (err) console.error(err);
     console.log(user);
+  });
+})();
+
+(function() {
+  new Board({
+    id: 1,
+    name: 'test',
+    tasks: [{id: 1,
+             source: 2}]
+  }).save(function(err,board) {
+    if (err) console.error(err);
+    console.log(board);
+  });
+})();
+
+(function() {
+  new Task({
+    id: 1,
+    name: 'testTask',
+    finished: false,
+    importance: 100,
+    description: 'wtf'
+  }).save(function(err,task) {
+    if (err) console.error(err);
+    console.log(task);
   });
 })();
 

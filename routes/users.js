@@ -4,6 +4,7 @@ var User = require('../schemas/user');
 var Board = require('../schemas/board');
 var Task = require('../schemas/task');
 var crypto = require('crypto');
+var async = require('async');
 
 function generateBoardID() {
   var buf = crypto.randomBytes(6);
@@ -17,7 +18,9 @@ function generateTaskID() {
 
 // 获取主页面
 router.get('/:uid', function(req, res, next) {
+  var runningCallback=0;
   var result = {};
+  result.tasks=[];
 	User.findOne({name: req.params.uid}, function(err, user){
 
     if(err) console.log(err);
@@ -27,39 +30,38 @@ router.get('/:uid', function(req, res, next) {
       result.username = user.name;
       var boardsName = [];
       var tasks = [];
-      for (bid in user.boards) {
-        Board.findOne({id: bid.id}, function(err, board) {
-
-          if(err) console.log(err);
-          if(!board) {
-            res.send({error: 'no board'});
-          } else {
+      var calls=[];
+      for (var sbid in (user.boards.toObject())) {
+        calls.push(function(callback) {
+          Board.findOne({id: user.boards.toObject()[sbid].id}, function(err, board) {
+            if(err) console.log(err);
             boardsName.push(board.name);
-            result.boardsName = boardsName;
-            Board.findOne({id: user.initboard}, function(err, board) {
-
-              if(err) console.log(err);
-              if(!board){
-                res.send({error: 'no board'});
-              } else {
-              for (tid in board.tasks) {
-                if(err) console.log(err);
-                if(!task) {
-                  res.send({error: 'no task'});
-                } else {
-                    Task.findOne({id: tid.id}, function(err, task) {
-
-                      tasks.push(task);
-                      result.tasks = tasks;
-                      res.send(result);
-                    });
-                  }
-                }
-              }  
-            });
-          }
+            callback(null,null);
+          });
         });
       }
+      async.parallel([function(callback) {
+        Board.findOne({id: user.initboard}, function(err, board) {
+          if(err) console.log(err);
+          if(board){
+            for (tid in board.tasks.toObject()) {
+              calls.push(function(callback) {
+                Task.findOne({id: board.tasks.toObject()[tid].id}, function(err, task) {
+                  if(err) console.log(err);
+                  else result.tasks.push(task);
+                  callback(null,null);
+                });
+              });
+            }
+          }
+          callback(null,null);
+        });
+      }],function(err,asyncres) {
+        async.parallel(calls, function(err, results) {
+          result.boardsName = boardsName;
+          res.send(result);
+        });
+      });
     }
   });
 });

@@ -17,7 +17,14 @@ router.post('/', function(req, res, next) {
       });
       return true;
     } else {
-      res.redirect('/users' + user.name);
+      res.send({
+        success: true,
+        user: {
+          name: user.name,
+          email: user.email,
+          boards: user.boards
+        }
+      });
       return true;
     }
   })(req, res, next);
