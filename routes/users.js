@@ -1,9 +1,19 @@
 var express = require('express');
 var router = express.Router();
+var User = require('../schemas/user');
+var Board = require('../schemas/board');
+var Task = require('../schemas/task');
 
 // 获取主页面
-router.get('/:userid', function(req, res, next) {
-
+router.get('/:uid', function(req, res, next) {
+	User.findOne({name: req.params.uid}, function(err, user){
+    if(err) console.log(err);
+    if (!user) {
+      res.send({error: 'no user'});
+    } else {
+      
+    }
+  })
 });
 
 // 获取某个 board

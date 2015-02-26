@@ -21,7 +21,7 @@ router.post('/', function(req, res, next) {
 		email: req.body.email,
 		password: password,
 		active: false,
-		confirm: confirm	
+		confirm: confirm
 	});
 
 	user.save(function (err, user) {
@@ -63,7 +63,7 @@ router.get('/confirm', function(req, res, next) {
 	var query = User.findOne({confirm: code});
 	query.select('name email active');
 	query.exec(function(err, user) {
-		if(err) return done(err);
+		if(err) console.console.log(err);
 		if (!user) {
 			return done(null, false, { message: 'Activation failed' });
 		}

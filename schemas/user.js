@@ -10,12 +10,8 @@ var UserSchema = new Schema({
 		password: String, // Hashed password
 		active: Boolean, // User Activation
 		confirm: String, // Confirm code
-		boards: [{ // User's task boards
-				id: String, // Board id
-				color: String, // Color for clients
-				private: Boolean, // Is it the private board (initial board) of the user?
-				admin: Boolean // Is the user the admin of the board?
-		}]
+		initboard: String, // initial board id
+		boards: [{ id: String }]
 });
 
 UserSchema.statics.hashPassword = function(email,password) {

@@ -11,22 +11,20 @@ router.post('/', function(req, res, next) {
     res.setHeader("Content-Type","application/json");
     if(err) return next(err);
     if(!user) {
-      res.write(JSON.stringify({
+      res.send({
         success: false,
         info: info
-      }));
-      res.send();
+      });
       return true;
     } else {
-      res.write(JSON.stringify({
+      res.send({
         success: true,
         user: {
           name: user.name,
           email: user.email,
           boards: user.boards
         }
-      }));
-      res.send();
+      });
       return true;
     }
   })(req,res,next);

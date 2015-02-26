@@ -10,7 +10,8 @@ var BoardSchema = new Schema({
 		}],
 		members: [{
 				id: String,
-				admin: Boolean}]
+				admin: Boolean
+			}]
 });
 
 var Board = mongoose.model('Board', BoardSchema);
