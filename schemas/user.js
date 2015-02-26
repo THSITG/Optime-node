@@ -10,8 +10,8 @@ var UserSchema = new Schema({
 		password: String, // Hashed password
 		active: Boolean, // User Activation
 		confirm: String, // Confirm code
-		initboard: String, // initial board id
-		boards: [{ id: String }]
+		initboard: Number, // initial board id
+		boards: [{ id: Number }]
 });
 
 UserSchema.statics.hashPassword = function(email,password) {
