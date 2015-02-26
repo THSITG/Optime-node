@@ -98,8 +98,15 @@ body.optime-loaded #loading-overlap {
   height: 20px;
   color: #d34336; // From paper-input-decorator
   font-size: 16px;
-  transition: opacity 0.2s ease-in-out;
+  transition: opacity 0.2s ease-in-out 0s, height 0.2s ease-in-out 0.2s;
+  height: 0px;
   opacity: 0;
+}
+
+#login-error.shown {
+  opacity: 1;
+  height: 20px;
+  transition: opacity 0.2s ease-in-out 0.2s, height 0.2s ease-in-out 0s;
 }
 
 paper-input-decorator::shadow #floatedLabelText {
@@ -126,4 +133,25 @@ paper-input-decorator::shadow .error[hidden] {
   display: flex !important;
   height: 0px;
   transform: scaleY(0);
+}
+
+#registerName {
+  opacity: 0;
+  height: 0;
+  padding: 0;
+  transition: opacity 0.2s ease-in-out 0s, height 0.2s ease-in-out 0.2s, padding 0.2s ease-in-out 0.2s;
+}
+
+[register] #registerName {
+  opacity: 1;
+  height: 51px;
+  padding: 0.75em 0;
+  transition: opacity 0.2s ease-in-out 0.2s, height 0.2s ease-in-out 0s, padding 0.2s ease-in-out 0s;
+}
+
+[register] #registerName.invalid {
+  opacity: 1;
+  height: 78px;
+  padding: 0.75em 0;
+  transition: opacity 0.2s ease-in-out 0.2s, height 0.2s ease-in-out 0s,padding 0.2s ease-in-out 0s;
 }

@@ -17,7 +17,7 @@ router.post('/', function(req, res, next) {
   	var confirm = buf.toString('base64');
  
 	var user = new User({
-		name: req.body.email,
+		name: req.body.name,
 		email: req.body.email,
 		password: password,
 		active: false,

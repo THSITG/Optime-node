@@ -159,38 +159,42 @@
         var loginCardContent = $.render["tmpl-login"]({});
         loginCard.innerHTML=loginCardContent;
 
+        var nameDecorator=loginCard.querySelector("#registerName");
+        var emailDecorator=loginCard.querySelector("#loginEmail");
+        var passwdDecorator=loginCard.querySelector("#loginPasswd");
+        var nameField=nameDecorator.querySelector("input");
+        var emailField=emailDecorator.querySelector("input");
+        var passwdField=passwdDecorator.querySelector("input");
+        var errorBox=loginCard.querySelector("#login-error");
+        function validateCallback() {
+          $(errorBox).removeClass("shown");
+          // Wait to update the input
+          window.setTimeout(function() {
+            if(emailDecorator.validate() && passwdDecorator.validate() && ((!loginCard.hasAttribute("register")) || nameDecorator.validate()))
+              loginCard.acceptDisabled=false;
+            else loginCard.acceptDisabled=true;
+          },0);
+        }
+        nameField.addEventListener("keydown",validateCallback);
+        emailField.addEventListener("keydown",validateCallback);
+        passwdField.addEventListener("keydown",validateCallback);
+
         var title = loginCard.querySelector("#login-title");
         var switcher = loginCard.querySelector("#login-switcher");
         switcher.addEventListener("core-change", function(e) {
           title.setAttribute("changing","");
+          if(e.target.checked) loginCard.setAttribute("register","");
+          else loginCard.removeAttribute("register");
+          validateCallback();
           window.setTimeout(function() {
             if(e.target.checked) {
-              loginCard.register=true;
               title.innerHTML="Register";
             } else {
-              loginCard.register=false;
               title.innerHTML="Login";
             }
             title.removeAttribute("changing");
           },100);
         });
-
-        var emailDecorator=loginCard.querySelector("#loginEmail");
-        var passwdDecorator=loginCard.querySelector("#loginPasswd");
-        var emailField=emailDecorator.querySelector("input");
-        var passwdField=passwdDecorator.querySelector("input");
-        var errorBox=loginCard.querySelector("#login-error");
-        function validateCallback() {
-          errorBox.style.opacity="0";
-          // Wait to update the input
-          window.setTimeout(function() {
-            if(emailDecorator.validate() && passwdDecorator.validate())
-              loginCard.acceptDisabled=false;
-            else loginCard.acceptDisabled=true;
-          },0);
-        }
-        emailField.addEventListener("keydown",validateCallback);
-        passwdField.addEventListener("keydown",validateCallback);
 
         loginCard.dismissable=true;
         loginCard.acceptable=true;
@@ -206,7 +210,7 @@
           $.post("/login", postData, function(data) {
             if(!data.success) {
               console.log(data.info.message);
-              errorBox.style.opacity="1";
+              $(errorBox).addClass("shown");
               errorBox.innerHTML = data.info.message;
             } else {
               frame.loggedIn=true;
