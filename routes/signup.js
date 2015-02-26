@@ -17,7 +17,7 @@ router.post('/', function(req, res, next) {
   	var confirm = buf.toString('base64');
  
 	var user = new User({
-		name: req.body.email,
+		name: req.body.username,
 		email: req.body.email,
 		password: password,
 		active: false,
@@ -46,7 +46,7 @@ router.post('/', function(req, res, next) {
 		from: 'Optime <admin@op-ti.me>',
 		to: req.body.email,
 		subject: 'Welcome to Optime',
-		html: '<p>click the link to confirm your email: <a>https://op-ti.me/signup/confirm?code=' + confirm + '</a></p>'
+		html: '<p>click <a href="https://op-ti.me/signup/confirm?code=' + confirm + '">here</a> to confirm your email</p>'
 	};
 
 	transporter.sendMail(mailOptions, function(error, info){

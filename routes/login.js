@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-  passport.authenticate('local', function(err,user,info) { 
+  passport.authenticate('local', function(err, user, info) { 
     res.setHeader("Content-Type","application/json");
     if(err) return next(err);
     if(!user) {
@@ -17,17 +17,10 @@ router.post('/', function(req, res, next) {
       });
       return true;
     } else {
-      res.send({
-        success: true,
-        user: {
-          name: user.name,
-          email: user.email,
-          boards: user.boards
-        }
-      });
+      res.redirect('/users' + user.name);
       return true;
     }
-  })(req,res,next);
+  })(req, res, next);
 });
 
 module.exports = router;

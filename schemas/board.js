@@ -9,7 +9,7 @@ var BoardSchema = new Schema({
 				source: Number
 		}],
 		members: [{
-				id: String,
+				name: String,
 				admin: Boolean
 			}]
 });

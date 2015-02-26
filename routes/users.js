@@ -6,14 +6,14 @@ var Task = require('../schemas/task');
 
 // 获取主页面
 router.get('/:uid', function(req, res, next) {
-  var callback = {};
+  var result = {};
 	User.findOne({name: req.params.uid}, function(err, user){
 
     if(err) console.log(err);
     if (!user) {
       res.send({error: 'no user'});
     } else {
-      callback.username = user.name;
+      result.username = user.name;
       var boardsName = [];
       var tasks = [];
       for (bid in user.boards) {
@@ -24,7 +24,7 @@ router.get('/:uid', function(req, res, next) {
             res.send({error: 'no board'});
           } else {
             boardsName.push(board.name);
-            callback.boardsName = boardsName;
+            result.boardsName = boardsName;
             Board.findOne({id: user.initboard}, function(err, board) {
 
               if(err) console.log(err);
@@ -39,8 +39,8 @@ router.get('/:uid', function(req, res, next) {
                     Task.findOne({id: tid.id}, function(err, task) {
 
                       tasks.push(task);
-                      callback.tasks = tasks;
-                      res.send(callback);
+                      result.tasks = tasks;
+                      res.send(result);
                     });
                   }
                 }
@@ -88,51 +88,112 @@ router.get('/:uid/boards/:bid', function(req, res, next) {
 
 // 创建 board
 router.post('/:uid/boards', function(req, res, next) {
-		
-});
+		var board = new Board({
+      name: req.body.name,
+      tasks: [],
+      members: [{
+        name: req.params.uid,
+        admin: true
+      }]
+    });
 
-// 删除 board
-router.delete('/:uid/boards/:bid', function(req, res, next) {
-		
-});
+    board.save(function(err, board) {
+      if(err) console.log(err);
+      console.log(board);
+    });
 
-// 创建新 task
-router.post('/:uid/boards/:bid/tasks', function(req, res, next) {
-		
-});
-
-// 更新 task
-router.put('/:uid/boards/:bid/tasks/:tid', function(req, res, next) {
-		
-});
-
-// 删除 task
-router.delete('/:uid/boards/:bid/tasks/:tid', function(req, res, next) {
-		
-});
-
-// 获取 board 信息
-router.get('/:uid/boards/:bid/profile', function(req, res, next) {
-		User.findOne({name: req.params.uid}, function(err, user) {
+    User.findOne({name: req.params.uid}, function(err, user) {
       if(err) console.log(err);
       if(!user) {
         res.send({error: 'no user'});
       } else {
-        Board.findOne({id: req.params.bid}, function(err, board) {
-          if(err) console.log(err);
-          if(!board) {
-            res.send({error: 'no board'});
-          } else {
-            res.send(board);
-          }
-        });
+        user.boards.push({id: });
+      }
+    });
+    res.send();
+});
+
+// 删除 board
+router.delete('/:uid/boards/:bid', function(req, res, next) {
+  User.findOne({name: req.params.uid}, function(err, user) {
+    user.boards.pull({id: });
+  });
+  Board.remove({id: req.params.bid}, function(err) {
+    if(err) console.log(err);
+  });
+});
+
+// 创建新 task
+router.post('/:uid/boards/:bid/tasks', function(req, res, next) {
+	var task = new Task ({
+      name: req.body.name,
+      description: req.body.description,
+      importance: req.body.importance,
+      finished: false
+    });
+
+    task.save(function(err, task) {
+      if(err) console.log(err);
+      console.log(task);
+    });
+
+    Board.findOne({id: req.params.bid}, function(err, board) {
+      if(err) console.log(err);
+      if(!board) {
+        res.send({error: 'no board'});
+      } else {
+        board.tasks.push({id: });
+        res.send();
       }
     });
 });
 
+// 更新 task
+router.put('/:uid/boards/:bid/tasks/:tid', function(req, res, next) {
+		Task.update({id: req.params.tid}, {
+      name: req.body.name,
+      description: req.body.des,
+      finished: req.body.finished,
+      importance: req.body.importance
+    }, function(err) {
+      if(err) console.log(err);
+    });
+});
+
+// 删除 task
+router.delete('/:uid/boards/:bid/tasks/:tid', function(req, res, next) {
+	Board.findOne({name: req.params.bid}, function(err, board) {
+    board.tasks.pull({id: });
+  });
+  Task.remove({id: req.params.tid}, function(err) {
+    if(err) console.log(err);
+  });
+});
+
+// 获取 board 信息
+router.get('/:uid/boards/:bid/profile', function(req, res, next) {
+	User.findOne({name: req.params.uid}, function(err, user) {
+
+    if(err) console.log(err);
+    if(!user) {
+      res.send({error: 'no user'});
+    } else {
+      Board.findOne({id: req.params.bid}, function(err, board) {
+
+        if(err) console.log(err);
+        if(!board) {
+          res.send({error: 'no board'});
+        } else {
+          res.send(board);
+        }
+      });
+    }
+  });
+});
+
 // 修改 board 信息
 router.post('/:uid/boards/:bid/profile', function(req, res, next) {
-		
+
 });
 
 module.exports = router;
