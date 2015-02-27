@@ -17,8 +17,11 @@ var config = require('./config');
 
 var mongoConnStr = "mongodb://";
 
-if(config.get("database:username") !== null && config.get("database:password") !== null) {
-  mongoConnStr += config.get("database:username") + ":" + config.get("database:password") + "@";
+if(config.get("database:username") != null && config.get("database:password") != null) {
+  mongoConnStr += config.get("database:username")
+    + ":"
+    + config.get("database:password")
+    + "@";
 }
 
 mongoConnStr += config.get("database:host");
