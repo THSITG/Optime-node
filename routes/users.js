@@ -5,15 +5,16 @@ var Board = require('../schemas/board');
 var Task = require('../schemas/task');
 var crypto = require('crypto');
 var async = require('async');
+var URLSafeBase64 = require('urlsafe-base64');
 
 function generateBoardID() {
   var buf = crypto.randomBytes(6);
-  return buf.toString('base64');
+  return URLSafeBase64.encode(buf);
 }
 
 function generateTaskID() {
   var buf = crypto.randomBytes(8);
-  return buf.toString('base64');
+  return URLSafeBase64.encode(buf);
 }
 
 // 获取主页面
@@ -28,7 +29,7 @@ router.get('/:uid', function(req, res, next) {
       var boardsName = [];
       var tasks = [];
       var calls=[];
-      for (var bid in (user.boards.toObject())) {
+      for (var bid in user.boards.toObject()) {
         calls.push(function(callback) {
           Board.findOne({id: user.boards.toObject()[bid].id}, function(err, board) {
             if(err) console.log(err);
@@ -130,15 +131,24 @@ router.post('/:uid/boards', function(req, res, next) {
 
 // 删除 board
 router.delete('/:uid/boards/:bid', function(req, res, next) {
-  User.findOne({name: req.params.uid}, function(err, user) {
-    user.boards.pull({id: req.params.bid});
-  });
-  Board.remove({id: req.params.bid}, function(err) {
-    if(err) console.log(err);
-    res.send({
-      success: true
+  async.parallel([
+    function(callback) {
+      User.findOne({name: req.params.uid}, function(err, user) {
+        user.boards.pull({id: req.params.bid});
+      });
+      callback(null, null);
+    },
+    function(callback) {
+      Board.remove({id: req.params.bid}, function(err) {
+        if(err) console.log(err);
+      });
+      callback(null, null);
+    }], function(err, result) {
+      if(err) console.log(err);
+      else res.send({
+        success: true
+      });
     });
-  });
 });
 
 // 创建新 task
