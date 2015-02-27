@@ -20,7 +20,15 @@ window.getBoards = (user,callback) ->
       boards.push(data)
       tot-=1
       callback boards if tot == 0
-    
-    
-    
- 
+
+window.getTask = (uname,bid,tid,callback) ->
+  $.get "/users/"+uname+"/boards/"+bid+"/tasks/"+tid, (data) ->
+    callback data
+
+window.newTask = (uname,pdata,callback) ->
+  $.post "/users/"+uname+"/boards/"+pdata.bid+"/tasks", {
+    name: pdata.title,
+    description: pdata.desc,
+    importance: pdata.impt
+  }, (data) ->
+    callback data

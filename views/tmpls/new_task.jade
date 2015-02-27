@@ -1,5 +1,11 @@
 script(id="tmpl-new-task", class="optime-tmpl", type="text/x-jsrender")
   h1 New Task
+  paper-dropdown-menu(class="new-task-dropdown", label="Taskboard")
+    paper-dropdown(class="dropdown")
+      core-menu(class="menu new-task-dropdown-menu")
+        | {{for boards}}
+        paper-item(class="new-task-dropdown-item", bid="{{:bid}}") {{:name}}
+        | {{/for}}
   paper-input-decorator(class="new-task-title", label="Title", floatingLabel="true", autoValidate="false")
     input(is="core-input",required=true)
   paper-input-decorator(class="new-task-desc", label="Description", floatingLabel="true", autoValidate="false")

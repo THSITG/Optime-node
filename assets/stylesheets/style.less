@@ -1,3 +1,6 @@
+@import "login.less";
+@import "new_task.less";
+
 body {
   padding: 0;
   margin: 0;
@@ -64,94 +67,3 @@ body.optime-loaded #loading-overlap {
   }
 }
 
-// Login
-
-#login-title {
-  transition: opacity 0.1s ease-out;
-  opacity: 1;
-  margin-bottom: 0;
-}
-
-#login-title[changing] {
-  transition: opacity 0.1s ease-in;
-  opacity: 0;
-}
-
-#login-bar {
-  height: 2em;
-  line-height: 2em;
-  margin-bottom: 1.34em;
-}
-
-#login-switcher {
-  position: relative;
-  top: 10px;
-}
-
-#login-switcher-hint {
-  margin-right: 6px;
-  color: rgba(0,0,0,26%);
-}
-
-#login-error {
-  line-height: 20px;
-  height: 20px;
-  color: #d34336; // From paper-input-decorator
-  font-size: 16px;
-  transition: opacity 0.2s ease-in-out 0s, height 0.2s ease-in-out 0.2s;
-  height: 0px;
-  opacity: 0;
-}
-
-#login-error.shown {
-  opacity: 1;
-  height: 20px;
-  transition: opacity 0.2s ease-in-out 0.2s, height 0.2s ease-in-out 0s;
-}
-
-paper-input-decorator::shadow #floatedLabelText {
-  transition: color 0.2s ease-in-out;
-}
-
-paper-input-decorator::shadow .unfocused-underline {
-  transition: background-color 0.2s ease-in-out;
-}
-
-paper-input-decorator::shadow .focused-underline {
-  transition: background-color 0.2s ease-in-out, transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-paper-input-decorator::shadow .error {
-  display: flex !important;
-  // TODO: Assume it's an one-line error
-  height: 27px;
-  transform: scaleY(1);
-  transition: height 0.2s ease-in-out,transform 0.2s ease-in-out;
-}
-
-paper-input-decorator::shadow .error[hidden] {
-  display: flex !important;
-  height: 0px;
-  transform: scaleY(0);
-}
-
-#registerName {
-  opacity: 0;
-  height: 0;
-  padding: 0;
-  transition: opacity 0.2s ease-in-out 0s, height 0.2s ease-in-out 0.2s, padding 0.2s ease-in-out 0.2s;
-}
-
-[register] #registerName {
-  opacity: 1;
-  height: 51px;
-  padding: 0.75em 0;
-  transition: opacity 0.2s ease-in-out 0.2s, height 0.2s ease-in-out 0s, padding 0.2s ease-in-out 0s;
-}
-
-[register] #registerName.invalid {
-  opacity: 1;
-  height: 78px;
-  padding: 0.75em 0;
-  transition: opacity 0.2s ease-in-out 0.2s, height 0.2s ease-in-out 0s,padding 0.2s ease-in-out 0s;
-}

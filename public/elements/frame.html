@@ -118,6 +118,16 @@
       transform: rotateY(90deg);
     }
 
+    [status='logged-out'] #fab-add{
+      transition: transform 0.2s ease-in-out;
+      transform: scale(0,0);
+    }
+
+    [status='logged-in'] #fab-add{
+      transition: transform 0.2s ease-in-out;
+      transform: scale(1,1);
+    }
+
     #board-list {
       height: 100%;
       width: 100%;
@@ -144,9 +154,9 @@
           </template>
         </core-list>
       </div>
-      <div id="main-panel" main>
+      <div id="main-panel" main status="{{loggedIn ? 'logged-in' : 'logged-out'}}">
         <core-header-panel id="navbar" flex>
-          <core-toolbar id="toolbar" status="{{loggedIn ? 'logged-in' : 'logged-out'}}">
+          <core-toolbar id="toolbar">
 
             <paper-icon-button id="toolbar-drawer" icon="menu" on-tap="{{drawerAction}}" core-drawer-toggle></paper-icon-button>
             <div id="toolbar-title" flex>{{ pageTitle }}</div>
@@ -174,6 +184,7 @@
       userAvatarLink: "",
 
       boardModels: [],
+      boards: [],
 
       drawerAction: function(e) {},
       loginAction: function(e) {
@@ -228,6 +239,7 @@
         loginCard.acceptText="Submit";
 
         var initializeBoards = function(boards) {
+          frame.boards=boards;
           frame.boardModels=boards.map(function(item) {
             return {
               selected: true,
@@ -240,29 +252,9 @@
           //TODO: sort
           var taskCards;
           tasks.forEach(function(e,index) {
-            var card = document.createElement("optime-card");
-            var cont=$.render['tmpl-task']({
-              title: e.name,
-              paras: e.description.split('\n')
-            });
-            card.innerHTML=cont;
-            cont.dismissAction = function(){
-              //TODO: remove function
-
-              this.hide();
-            }
-
-            card.dismissable=true;
-            card.acceptable=false;
-
-            card.setAttribute("wide","");
-
-            meta = document.createElement('core-meta');
-            meta.type='transition';
-            meta.byId("optime-card-fade").setup(card);
 
             window.setTimeout(function() {
-              frame.insertCard(card);
+              frame.insertCard(buildTaskCard(e));
             },index*100);
           });
         }
@@ -342,9 +334,44 @@
         this.loggedIn=false;
       },
       fabAdd: function(e) {
+        var boardsData = this.boards.map(function(e) {
+          return {
+            bid: e.id,
+            name: e.name
+          };
+        });
+
         var newTaskCard = document.createElement("optime-card");
-        var newTaskCardContent = $.render["tmpl-new-task"]({});
+        var newTaskCardContent = $.render["tmpl-new-task"]({
+          boards: boardsData
+        });
         newTaskCard.innerHTML=newTaskCardContent;
+
+        var titleDecorator = newTaskCard.querySelector(".new-task-title");
+        var descDecorator = newTaskCard.querySelector(".new-task-desc");
+        var titleField = newTaskCard.querySelector(".new-task-title input");
+        var descField = newTaskCard.querySelector(".new-task-desc textarea");
+        newTaskCard.acceptAction = function() {
+          if(titleDecorator.validate() && descDecorator.validate()) {
+            var boardDropdownSelected = newTaskCard.querySelector(".new-task-dropdown paper-item.core-selected");
+            var selectedBid=boardDropdownSelected.getAttribute("bid");
+            newTask(frame.name,{
+              bid: selectedBid,
+              title: titleField.value,
+              desc: descField.value,
+              impt: 10
+              //FIXME: importance
+            },function(data) {
+              //TODO: error handling
+              newTaskCard.hide();
+              getTask(frame.name,selectedBid,data.tid,function(taskData) {
+                window.setTimeout(function() {
+                  frame.insertCard(buildTaskCard(taskData));
+                },500);
+              });
+            });
+          }
+        };
 
         newTaskCard.dismissable=true;
         newTaskCard.acceptable=true;

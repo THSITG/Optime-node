@@ -178,6 +178,20 @@ router.post('/:uid/boards/:bid/tasks', function(req, res, next) {
   });
 });
 
+router.get('/:uid/boards/:bid/tasks/:tid',function(req,res,next) {
+  Task.findOne({id: req.params.tid},function(err,task) {
+    if(err) {
+      console.log(err);
+      res.send({
+        error: true,
+        message: "Internal error. Please contact the server admin"
+      });
+    } else {
+      res.send(task);
+    }
+  });
+});
+
 // 更新 task
 router.put('/:uid/boards/:bid/tasks/:tid', function(req, res, next) {
   Task.update({id: req.params.tid}, {
