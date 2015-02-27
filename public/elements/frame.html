@@ -138,7 +138,7 @@
         <core-list id="board-list" data="{{boardModels}}">
           <template>
             <core-label horizontal layout>
-              <paper-checkbox class="board-toggle" checked="{{model.checked}}"></paper-checkbox>
+              <paper-checkbox class="board-toggle" checked="{{model.selected}}"></paper-checkbox>
               <h4 class="board-name">{{model.name}}</h4>
             </core-label>
           </template>
@@ -234,6 +234,37 @@
               name: item.name
             };
           });
+          var tasks = boards.reduce(function(tot,cur) {
+            return tot.concat(cur.tasks);
+          },[]);
+          //TODO: sort
+          var taskCards;
+          tasks.forEach(function(e,index) {
+            var card = document.createElement("optime-card");
+            var cont=$.render['tmpl-task']({
+              title: e.name,
+              paras: e.description.split('\n')
+            });
+            card.innerHTML=cont;
+            cont.dismissAction = function(){
+              //TODO: remove function
+
+              this.hide();
+            }
+
+            card.dismissable=true;
+            card.acceptable=false;
+
+            card.setAttribute("wide","");
+
+            meta = document.createElement('core-meta');
+            meta.type='transition';
+            meta.byId("optime-card-fade").setup(card);
+
+            window.setTimeout(function() {
+              frame.insertCard(card);
+            },index*100);
+          });
         }
 
         var initializeUser = function(user) {
@@ -260,7 +291,9 @@
               } else {
                 window.setTimeout(function() {
                   var regHintCard = document.createElement("optime-card");
-                  var regHintCardContent = $.render["tmpl-register-hint"]({});
+                  var regHintCardContent = $.render["tmpl-register-hint"]({
+                    email: postData.email
+                  });
                   regHintCard.innerHTML=regHintCardContent;
 
                   regHintCard.dismissable=true;
@@ -304,6 +337,7 @@
 
         this.insertCard(loginCard);
       },
+      //TODO: Logout
       accountAction: function(e) {
         this.loggedIn=false;
       },
