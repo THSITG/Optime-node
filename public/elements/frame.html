@@ -118,9 +118,31 @@
       transform: rotateY(90deg);
     }
 
+    #board-list {
+      height: 100%;
+      width: 100%;
+    }
+
+    .board-toggle {
+      padding: 20px;
+    }
+
+    .board-name {
+      margin: 0;
+      line-height: 58px;
+    }
+
     </style>
     <core-drawer-panel forceNarrow="true">
       <div id="drawer-panel" drawer>
+        <core-list id="board-list" data="{{boardModels}}">
+          <template>
+            <core-label horizontal layout>
+              <paper-checkbox class="board-toggle" checked="{{model.checked}}"></paper-checkbox>
+              <h4 class="board-name">{{model.name}}</h4>
+            </core-label>
+          </template>
+        </core-list>
       </div>
       <div id="main-panel" main>
         <core-header-panel id="navbar" flex>
@@ -148,8 +170,10 @@
       pageTitle: "Loading...",
 
       loggedIn: false,
-      username: "CircuitCoder",
+      username: "",
       userAvatarLink: "",
+
+      boardModels: [],
 
       drawerAction: function(e) {},
       loginAction: function(e) {
@@ -202,6 +226,25 @@
         loginCard.acceptDisabled=true;
         loginCard.dismissText="Dismiss";
         loginCard.acceptText="Submit";
+
+        var initializeBoards = function(boards) {
+          frame.boardModels=boards.map(function(item) {
+            return {
+              selected: true,
+              name: item.name
+            };
+          });
+        }
+
+        var initializeUser = function(user) {
+          gravatarHash = md5(user.email.trim().toLowerCase());
+          frame.userAvatarLink = "https://www.gravatar.com/avatar/" + gravatarHash + "?d=mm";
+
+          frame.name=user.name;
+
+          getBoards(user, initializeBoards);
+        }
+
         loginCard.acceptAction = function() {
           if(loginCard.hasAttribute("register")) {
             var postData = {
@@ -236,11 +279,10 @@
               }
             });
           } else {
-            var postData = {
+            getUser({
               email: emailField.value,
               password: passwdField.value
-            }
-            $.post("/login", postData, function(data) {
+            }, function(data) {
               if(!data.success) {
                 console.log(data.info.message);
                 $(errorBox).addClass("shown");
@@ -248,10 +290,8 @@
               } else {
                 frame.loggedIn=true;
                 loginCard.hide();
-                
-                gravatarHash = md5(postData.email.trim().toLowerCase());
-                frame.userAvatarLink = "https://www.gravatar.com/avatar/" + gravatarHash + "?d=mm";
-                console.log(frame.userAvatarLink);
+
+                initializeUser(data.user)
               }
             });
           }

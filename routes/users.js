@@ -70,7 +70,6 @@ router.get('/:uid/boards/:bid', function(req, res, next) {
     if(err) console.log(err);
     if(user) {
       Board.findOne({id: req.params.bid}, function(err, board){
-
         if(err) console.log(err);
         if(board) {
           var tasks = [];
@@ -78,17 +77,20 @@ router.get('/:uid/boards/:bid', function(req, res, next) {
           for (var tid in board.tasks.toObject()) {
             calls.push(function(callback){
               Task.findOne({id: board.tasks.toObject()[tid].id}, function(err, task){
-
                 if(err) console.log(err);
                 if(task) {
                   tasks.push(task);
                 }
+                callback(null, null);
               });
-              callback(null, null);
             });
           }
           async.parallel(calls, function(err, reseults) {
-            res.send(tasks);
+            res.send({
+              name: board.name,
+              id: board.id,
+              tasks: tasks
+            });
           });
         }
       });
