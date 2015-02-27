@@ -6,8 +6,8 @@ script(id="tmpl-new-task", class="optime-tmpl", type="text/x-jsrender")
         | {{for boards}}
         paper-item(class="new-task-dropdown-item", bid="{{:bid}}") {{:name}}
         | {{/for}}
-  paper-input-decorator(class="new-task-title", label="Title", floatingLabel="true", autoValidate="false")
-    input(is="core-input",required=true)
-  paper-input-decorator(class="new-task-desc", label="Description", floatingLabel="true", autoValidate="false")
+  paper-input-decorator(class="new-task-title", label="Title", floatingLabel="true", autoValidate="true", error="Please enter a title")
+    input(is="core-input",required="true")
+  paper-input-decorator(class="new-task-desc", label="Description (Optional)", floatingLabel="true", autoValidate="false")
     paper-autogrow-textarea(class="new-task-desc-wrapper")
       textarea
