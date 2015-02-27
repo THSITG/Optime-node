@@ -17,11 +17,8 @@ var config = require('./config');
 
 var mongoConnStr = "mongodb://";
 
-if(config.get("database:username") != null && config.get("database:password") != null) {
-  mongoConnStr += config.get("database:username")
-    + ":"
-    + config.get("database:password")
-    + "@";
+if(config.get("database:username") !== null && config.get("database:password") !== null) {
+  mongoConnStr += config.get("database:username") + ":" + config.get("database:password") + "@";
 }
 
 mongoConnStr += config.get("database:host");
@@ -41,8 +38,8 @@ var Board = require('./schemas/board');
 
 // passport local strategy config
 
-var passport = require('passport')
-, LocalStrategy = require('passport-local').Strategy;
+var passport = require('passport'),
+    LocalStrategy = require('passport-local').Strategy;
 passport.use(new LocalStrategy({
   usernameField: 'email',
   passwordField: 'password'

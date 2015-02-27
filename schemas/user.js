@@ -19,11 +19,11 @@ UserSchema.statics.hashPassword = function(email,password) {
   token = password + email + salt;
   md5.update(token);
   return md5.digest('base64');
-}
+};
 
 UserSchema.methods.validatePassword = function(input) {
   return this.model('User').hashPassword(this.email,input) == this.password;
-}
+};
 
 var User = mongoose.model('User', UserSchema);
 

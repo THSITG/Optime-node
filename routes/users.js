@@ -41,7 +41,7 @@ router.get('/:uid', function(req, res, next) {
         Board.findOne({id: user.initboard}, function(err, board) {
           if(err) console.log(err);
           if(board){
-            for (tid in board.tasks.toObject()) {
+            for (var tid in board.tasks.toObject()) {
               calls.push(function(callback) {
                 Task.findOne({id: board.tasks.toObject()[tid].id}, function(err, task) {
                   if(err) console.log(err);
@@ -75,7 +75,7 @@ router.get('/:uid/boards/:bid', function(req, res, next) {
         if(board) {
           var tasks = [];
           var calls = [];
-          for (tid in board.tasks.toObject()) {
+          for (var tid in board.tasks.toObject()) {
             calls.push(function(callback){
               Task.findOne({id: board.tasks.toObject()[tid].id}, function(err, task){
 
